@@ -17,14 +17,16 @@ const STAGES = [
 
 type Role = "EP" | "PR" | "SP" | "DP" | "ED";
 
+type EpisodeStatus = "normal" | "active" | "blocked" | "idle";
+
 type Episode = {
   code: string;
   location: string;
   title: string;
   meta: string;
-  stageIndex: number; // 1-based column
+  stageIndex: number;
   stageLabel: string;
-  status: "normal" | "active" | "blocked" | "idle";
+  status: EpisodeStatus;
   roles: Role[];
   delay: number;
 };
@@ -39,7 +41,7 @@ const EPISODES: Episode[] = [
     stageLabel: "Review Cut",
     status: "active",
     roles: ["PR", "ED"],
-    delay: 100,
+    delay: 40,
   },
   {
     code: "Ep. 05",
@@ -50,40 +52,40 @@ const EPISODES: Episode[] = [
     stageLabel: "On Location",
     status: "normal",
     roles: ["DP"],
-    delay: 150,
+    delay: 80,
   },
   {
-    code: "! Blocked / Action Required",
+    code: "Blocked — Action Required",
     location: "Dakar, Senegal",
     title: "Chef Amadou’s Teranga",
-    meta: "Dakar, Senegal • Logistics stalled",
+    meta: "Dakar, Senegal · Logistics stalled",
     stageIndex: 4,
     stageLabel: "Visa Delay",
     status: "blocked",
     roles: ["EP", "PR", "SP"],
-    delay: 200,
+    delay: 120,
   },
   {
     code: "Ep. 06",
     location: "Oaxaca, Mexico",
     title: "The Masa of Oaxaca",
-    meta: "Discovery • Pre-interviewing talent",
+    meta: "Discovery · Pre-interviewing talent",
     stageIndex: 2,
     stageLabel: "In Scouting",
     status: "idle",
     roles: ["SP"],
-    delay: 250,
+    delay: 160,
   },
   {
     code: "Ep. 07",
     location: "Hokkaido, Japan",
     title: "Sourcing the Ainu Kitchen",
-    meta: "Sourcing • Translator needed",
+    meta: "Sourcing · Translator needed",
     stageIndex: 1,
     stageLabel: "",
     status: "idle",
     roles: ["PR"],
-    delay: 300,
+    delay: 200,
   },
   {
     code: "Ep. 08",
@@ -94,43 +96,36 @@ const EPISODES: Episode[] = [
     stageLabel: "PPM Fri",
     status: "normal",
     roles: ["EP", "PR", "DP"],
-    delay: 350,
+    delay: 240,
   },
   {
     code: "Ep. 03",
     location: "Marrakech, Morocco",
     title: "Tagine at the Souk",
-    meta: "Edit in progress — Assembly locked",
+    meta: "Edit in progress · Assembly locked",
     stageIndex: 7,
     stageLabel: "LUT pending",
     status: "normal",
     roles: ["ED"],
-    delay: 400,
+    delay: 280,
   },
   {
     code: "Ep. 02",
     location: "Seoul, South Korea",
     title: "Halmeoni’s Doenjang Jjigae",
-    meta: "Published — Content calendar active",
+    meta: "Published · Content calendar active",
     stageIndex: 8,
     stageLabel: "Live",
     status: "normal",
     roles: ["ED"],
-    delay: 450,
+    delay: 320,
   },
 ];
 
 function Avatar({ role }: { role: Role }) {
-  const shades: Record<Role, string> = {
-    EP: "bg-stone-500 text-background",
-    PR: "bg-stone-400 text-background",
-    SP: "bg-stone-300 text-foreground",
-    DP: "bg-stone-600 text-background",
-    ED: "bg-stone-700 text-background",
-  };
   return (
     <div
-      className={`size-6 rounded-full border border-background flex items-center justify-center text-[8px] font-mono font-medium ${shades[role]}`}
+      className="size-6 rounded-full border-hairline border-[color:var(--color-border)] bg-surface flex items-center justify-center text-[8px] font-bold text-ink-secondary tracking-tight"
       title={role}
     >
       {role}
@@ -138,23 +133,25 @@ function Avatar({ role }: { role: Role }) {
   );
 }
 
-function StageMarker({ status, label }: { status: Episode["status"]; label: string }) {
+function StageMarker({ status, label }: { status: EpisodeStatus; label: string }) {
   const dot =
     status === "blocked"
-      ? "bg-accent rotate-45 ring-4 ring-accent/20"
+      ? "size-2.5 rotate-45 bg-warning"
       : status === "active"
-        ? "rounded-full bg-accent ring-4 ring-accent/10"
+        ? "size-2.5 rounded-full bg-ink"
         : status === "idle"
-          ? "rounded-full bg-foreground/30"
-          : "rounded-full bg-foreground ring-4 ring-foreground/5";
+          ? "size-2 rounded-full border-hairline border-[color:var(--color-border-strong)] bg-canvas"
+          : "size-2.5 rounded-full bg-ink";
+
   const labelColor =
-    status === "blocked" ? "text-accent font-bold" : "text-muted-foreground";
+    status === "blocked" ? "text-warning" : "text-ink-secondary";
+
   return (
     <div className="flex flex-col items-center relative">
-      <div className={`size-3 ${dot}`} />
+      <div className={dot} />
       {label ? (
         <span
-          className={`absolute top-[65%] mt-1 whitespace-nowrap text-[9px] font-mono uppercase tracking-tighter ${labelColor}`}
+          className={`absolute top-[calc(100%+6px)] whitespace-nowrap text-[8px] font-bold uppercase tracking-[0.08em] ${labelColor}`}
         >
           {label}
         </span>
@@ -165,32 +162,28 @@ function StageMarker({ status, label }: { status: Episode["status"]; label: stri
 
 function EpisodeRow({ ep }: { ep: Episode }) {
   const isBlocked = ep.status === "blocked";
-  const rowBg = isBlocked
-    ? "bg-accent/[0.02] hover:bg-accent/[0.04]"
-    : "hover:bg-black/[0.02]";
-  const line = isBlocked ? "bg-accent/20" : "bg-border";
 
   return (
     <div
-      className={`group grid grid-cols-[320px_1fr] border-b border-border ${rowBg} transition-colors duration-500 animate-reveal`}
+      className="group grid grid-cols-[320px_1fr] border-t-hairline transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
       style={{ animationDelay: `${ep.delay}ms` }}
     >
       <div className="py-6 pr-8">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div>
             <span
-              className={`text-[9px] font-mono mb-1 block uppercase tracking-tighter ${
-                isBlocked ? "text-accent italic font-bold" : "text-muted-foreground"
+              className={`text-[8px] font-bold mb-2 block uppercase tracking-[0.12em] ${
+                isBlocked ? "text-warning" : "text-ink-muted"
               }`}
             >
-              {isBlocked ? ep.code : `${ep.code} • ${ep.location}`}
+              {isBlocked ? ep.code : `${ep.code} · ${ep.location}`}
             </span>
-            <h3 className="font-display text-xl group-hover:text-accent transition-colors">
+            <h3 className="text-[16px] font-bold text-ink group-hover:text-ink transition-colors">
               {ep.title}
             </h3>
-            <p className="text-[11px] italic text-muted-foreground mt-1">{ep.meta}</p>
+            <p className="text-[11px] text-ink-secondary mt-1.5">{ep.meta}</p>
           </div>
-          <div className="flex -space-x-1">
+          <div className="flex -space-x-1 shrink-0">
             {ep.roles.map((r, i) => (
               <Avatar key={i} role={r} />
             ))}
@@ -198,8 +191,8 @@ function EpisodeRow({ ep }: { ep: Episode }) {
         </div>
       </div>
       <div className="grid grid-cols-8 items-center px-4 relative h-full">
-        <div className={`absolute left-4 right-4 h-px top-1/2 -translate-y-1/2 ${line}`} />
-        <div className="z-10" style={{ gridColumnStart: ep.stageIndex }}>
+        <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-px bg-border" />
+        <div className="z-10 flex justify-center" style={{ gridColumnStart: ep.stageIndex }}>
           <StageMarker status={ep.status} label={ep.stageLabel} />
         </div>
       </div>
@@ -211,74 +204,79 @@ function Pipeline() {
   const stalled = EPISODES.filter((e) => e.status === "blocked").length;
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-accent/10">
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-6 bg-background/90 backdrop-blur-md border-b border-border">
+    <div className="min-h-screen bg-canvas text-ink">
+      {/* Navigation — disappears until needed */}
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-5 bg-canvas/85 backdrop-blur-md border-b-hairline">
         <div className="flex items-center gap-12">
-          <h1 className="font-display italic text-2xl tracking-tight">
-            The Meals That Matter
-          </h1>
-          <div className="hidden md:flex gap-8 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
-            <a href="#" className="text-foreground border-b border-foreground pb-1">
-              Episodes
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Shoot Days
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Talent Bank
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Team
-            </a>
+          <span className="text-[13px] font-bold tracking-[-0.02em]">Chi Les</span>
+          <div className="hidden md:flex gap-8 text-[13px] text-ink-secondary">
+            <a href="#" className="text-ink">Episodes</a>
+            <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Shoot Days</a>
+            <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Talent Bank</a>
+            <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Team</a>
           </div>
         </div>
         <div className="flex items-center gap-6">
-          <div className="text-[11px] font-mono text-muted-foreground uppercase tracking-tighter">
-            <span className="text-accent font-bold italic">
+          <div className="text-[11px] text-ink-secondary">
+            <span className="text-warning font-bold">
               {String(stalled).padStart(2, "0")}
             </span>{" "}
-            episodes stalled
+            stalled
           </div>
-          <button className="px-5 py-2.5 bg-foreground text-background text-[11px] font-bold uppercase tracking-widest hover:bg-accent transition-colors duration-300">
-            New Episode
+          {/* Single solid CTA — the one primary button on this screen */}
+          <button className="px-5 py-2 bg-ink text-canvas text-[13px] font-medium rounded-none hover:bg-ink-secondary transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)]">
+            Create project
           </button>
         </div>
       </nav>
 
-      <main className="p-8">
-        <div className="grid grid-cols-[320px_1fr] mb-4 items-end">
+      <main className="px-8 py-24 max-w-[1440px] mx-auto">
+        {/* Section header */}
+        <div className="grid grid-cols-[320px_1fr] mb-8 items-end">
           <div className="pb-4">
-            <h2 className="font-display text-4xl leading-tight">Production Pipeline</h2>
-            <p className="text-muted-foreground text-sm mt-1">
+            <div className="text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted mb-3">
+              Production Pipeline
+            </div>
+            <h1 className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
+              Episode overview
+            </h1>
+            <p className="text-[13px] text-ink-secondary mt-1">
               Active cycle — Autumn Series 04
             </p>
           </div>
-          <div className="grid grid-cols-8 text-[10px] font-mono font-medium uppercase tracking-widest text-muted-foreground border-b border-border pb-4 px-4">
-            {STAGES.map((s) => (
-              <div key={s} className="px-2">
+          <div className="grid grid-cols-8 text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted border-b-hairline pb-4 px-4">
+            {STAGES.map((s, i) => (
+              <div key={s} className="px-2 text-center" style={{ gridColumnStart: i + 1 }}>
                 {s}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="space-y-1">
+        <div>
           {EPISODES.map((ep, i) => (
             <EpisodeRow key={i} ep={ep} />
           ))}
+          <div className="border-t-hairline" />
         </div>
 
-        <footer className="mt-12 flex justify-between items-center text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] animate-reveal" style={{ animationDelay: "500ms" }}>
+        {/* Footer meta */}
+        <footer
+          className="mt-24 pt-8 border-t-hairline flex justify-between items-center text-[11px] text-ink-secondary animate-reveal"
+          style={{ animationDelay: "400ms" }}
+        >
           <div className="flex gap-12">
             <div>
-              Production Load: <span className="text-foreground">82%</span>
+              <span className="text-ink-muted uppercase tracking-[0.12em] text-[8px] font-bold mr-3">Load</span>
+              <span className="text-ink">82%</span>
             </div>
             <div>
-              Post-Production Queue: <span className="text-foreground">04 Episodes</span>
+              <span className="text-ink-muted uppercase tracking-[0.12em] text-[8px] font-bold mr-3">Post queue</span>
+              <span className="text-ink">04 episodes</span>
             </div>
           </div>
-          <div className="text-right italic font-display tracking-normal normal-case">
-            Current Local Time: 11:42 AM — Shoot active in Bologna
+          <div className="text-right">
+            11:42 · Shoot active in Bologna
           </div>
         </footer>
       </main>
