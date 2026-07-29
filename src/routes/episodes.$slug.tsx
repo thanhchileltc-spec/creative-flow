@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getEpisode, STAGES, type StageDetail, type StageDoc, type TalentRecord } from "@/lib/episodes";
+import { getEpisode, STAGES, type Episode, type StageDetail, type StageDoc, type TalentRecord } from "@/lib/episodes";
 
 export const Route = createFileRoute("/episodes/$slug")({
   loader: ({ params }) => {
