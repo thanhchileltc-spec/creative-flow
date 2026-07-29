@@ -161,7 +161,7 @@ function EpisodeDetail() {
             Stage-by-stage
           </div>
           <div>
-            {episode.stages.map((stage) => (
+            {episode.stages.map((stage: StageDetail) => (
               <StageBlock key={stage.key} stage={stage} />
             ))}
             <div className="border-t-hairline" />
@@ -184,7 +184,7 @@ function EpisodeDetail() {
             </div>
           ) : (
             <div>
-              {episode.talent.map((t, i) => (
+              {episode.talent.map((t: TalentRecord, i: number) => (
                 <div
                   key={i}
                   className="grid grid-cols-[1fr_1fr_1fr_120px] gap-6 py-4 border-t-hairline items-baseline"
