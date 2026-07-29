@@ -1,126 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { EPISODES, STAGES, type Episode, type EpisodeStatus, type Role } from "@/lib/episodes";
 
 export const Route = createFileRoute("/")({
   component: Pipeline,
 });
 
-const STAGES = [
-  "Sourcing",
-  "Discovery",
-  "Story Lock",
-  "Logistics",
-  "PPM",
-  "Shoot",
-  "Post",
-  "Publish",
-] as const;
-
-type Role = "EP" | "PR" | "SP" | "DP" | "ED";
-
-type EpisodeStatus = "normal" | "active" | "blocked" | "idle";
-
-type Episode = {
-  code: string;
-  location: string;
-  title: string;
-  meta: string;
-  stageIndex: number;
-  stageLabel: string;
-  status: EpisodeStatus;
-  roles: Role[];
-  delay: number;
-};
-
-const EPISODES: Episode[] = [
-  {
-    code: "Ep. 04",
-    location: "Hanoi, Vietnam",
-    title: "Bà Hạnh’s phở stall",
-    meta: "Paired with: Morning Market (Day 4)",
-    stageIndex: 7,
-    stageLabel: "Review Cut",
-    status: "active",
-    roles: ["PR", "ED"],
-    delay: 40,
-  },
-  {
-    code: "Ep. 05",
-    location: "Bologna, Italy",
-    title: "Nonna Rosa’s Gnocchi",
-    meta: "Shoot Day 1 of 2 — Wrap 22:00",
-    stageIndex: 6,
-    stageLabel: "On Location",
-    status: "normal",
-    roles: ["DP"],
-    delay: 80,
-  },
-  {
-    code: "Blocked — Action Required",
-    location: "Dakar, Senegal",
-    title: "Chef Amadou’s Teranga",
-    meta: "Dakar, Senegal · Logistics stalled",
-    stageIndex: 4,
-    stageLabel: "Visa Delay",
-    status: "blocked",
-    roles: ["EP", "PR", "SP"],
-    delay: 120,
-  },
-  {
-    code: "Ep. 06",
-    location: "Oaxaca, Mexico",
-    title: "The Masa of Oaxaca",
-    meta: "Discovery · Pre-interviewing talent",
-    stageIndex: 2,
-    stageLabel: "In Scouting",
-    status: "idle",
-    roles: ["SP"],
-    delay: 160,
-  },
-  {
-    code: "Ep. 07",
-    location: "Hokkaido, Japan",
-    title: "Sourcing the Ainu Kitchen",
-    meta: "Sourcing · Translator needed",
-    stageIndex: 1,
-    stageLabel: "",
-    status: "idle",
-    roles: ["PR"],
-    delay: 200,
-  },
-  {
-    code: "Ep. 08",
-    location: "Lisbon, Portugal",
-    title: "Maria’s Bacalhau",
-    meta: "Paired with: The Masa of Oaxaca (Day 6)",
-    stageIndex: 5,
-    stageLabel: "PPM Fri",
-    status: "normal",
-    roles: ["EP", "PR", "DP"],
-    delay: 240,
-  },
-  {
-    code: "Ep. 03",
-    location: "Marrakech, Morocco",
-    title: "Tagine at the Souk",
-    meta: "Edit in progress · Assembly locked",
-    stageIndex: 7,
-    stageLabel: "LUT pending",
-    status: "normal",
-    roles: ["ED"],
-    delay: 280,
-  },
-  {
-    code: "Ep. 02",
-    location: "Seoul, South Korea",
-    title: "Halmeoni’s Doenjang Jjigae",
-    meta: "Published · Content calendar active",
-    stageIndex: 8,
-    stageLabel: "Live",
-    status: "normal",
-    roles: ["ED"],
-    delay: 320,
-  },
-];
 
 function Avatar({ role }: { role: Role }) {
   return (
@@ -164,7 +48,9 @@ function EpisodeRow({ ep }: { ep: Episode }) {
   const isBlocked = ep.status === "blocked";
 
   return (
-    <div
+    <Link
+      to="/episodes/$slug"
+      params={{ slug: ep.slug }}
       className="group grid grid-cols-[320px_1fr] border-t-hairline transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
       style={{ animationDelay: `${ep.delay}ms` }}
     >
@@ -196,7 +82,7 @@ function EpisodeRow({ ep }: { ep: Episode }) {
           <StageMarker status={ep.status} label={ep.stageLabel} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
