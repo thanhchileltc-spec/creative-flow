@@ -59,9 +59,9 @@ function talentStatusClass(s: TalentRecord["status"]) {
 }
 
 function EpisodeDetail() {
-  const { episode } = Route.useLoaderData();
+  const { episode } = Route.useLoaderData() as { episode: Episode };
   const isBlocked = episode.status === "blocked";
-  const currentStage = episode.stages.find((s) => s.status === "current" || s.status === "blocked");
+  const currentStage = episode.stages.find((s: StageDetail) => s.status === "current" || s.status === "blocked");
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
