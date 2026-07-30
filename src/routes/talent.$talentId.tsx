@@ -5,10 +5,11 @@ import {
   episodeCode,
   episodeTitle,
   type ApprovalStatus,
+  type TalentProfile,
 } from "@/lib/talent-bank";
 
 export const Route = createFileRoute("/talent/$talentId")({
-  loader: ({ params }) => {
+  loader: ({ params }): { talent: TalentProfile } => {
     const talent = getTalent(params.talentId);
     if (!talent) throw notFound();
     return { talent };
@@ -63,7 +64,7 @@ function outcomeLabel(o: "advance" | "hold" | "pass") {
 }
 
 function TalentDetail() {
-  const { talent: t } = Route.useLoaderData();
+  const { talent: t } = Route.useLoaderData() as { talent: TalentProfile };
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
