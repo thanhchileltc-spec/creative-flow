@@ -99,7 +99,7 @@ function Pipeline() {
             <a href="#" className="text-ink">Episodes</a>
             <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Shoot Days</Link>
 
-            <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Talent Bank</a>
+            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Talent Bank</Link>
             <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Team</a>
           </div>
         </div>

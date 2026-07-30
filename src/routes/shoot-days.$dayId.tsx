@@ -98,6 +98,9 @@ function ShootDayDetail() {
             <Link to="/shoot-days" className="text-ink">
               Shoot Days
             </Link>
+            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Talent Bank
+            </Link>
           </div>
         </div>
         <Link
