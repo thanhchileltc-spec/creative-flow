@@ -11,7 +11,7 @@ import {
 type Filter = ApprovalStatus | "all";
 
 export const Route = createFileRoute("/talent/")({
-  validateSearch: (search: Record<string, unknown>): { status: Filter } => {
+  validateSearch: (search: Record<string, unknown>): { status?: Filter } => {
     const s = String(search.status ?? "all");
     return {
       status: (APPROVAL_ORDER as string[]).includes(s) ? (s as ApprovalStatus) : "all",
@@ -116,7 +116,7 @@ function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
 }
 
 function TalentBank() {
-  const { status } = Route.useSearch();
+  const { status = "all" } = Route.useSearch();
   const navigate = useNavigate();
   const rows = status === "all" ? TALENT : TALENT.filter((t) => t.approval === status);
   const needsAction = TALENT.filter(
