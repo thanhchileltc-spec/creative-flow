@@ -74,6 +74,12 @@ function EpisodeDetail() {
             <Link to="/" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
               Episodes
             </Link>
+            <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Shoot Days
+            </Link>
+            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Talent Bank
+            </Link>
           </div>
         </div>
         <Link
