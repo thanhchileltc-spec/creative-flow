@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShootDaysIndexRoute = ShootDaysIndexRouteImport.update({
+  id: '/shoot-days/',
+  path: '/shoot-days/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
@@ -26,27 +32,31 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days/': typeof ShootDaysIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days': typeof ShootDaysIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days/': typeof ShootDaysIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/episodes/$slug'
+  fullPaths: '/' | '/episodes/$slug' | '/shoot-days/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/episodes/$slug'
-  id: '__root__' | '/' | '/episodes/$slug'
+  to: '/' | '/episodes/$slug' | '/shoot-days'
+  id: '__root__' | '/' | '/episodes/$slug' | '/shoot-days/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
+  ShootDaysIndexRoute: typeof ShootDaysIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shoot-days/': {
+      id: '/shoot-days/'
+      path: '/shoot-days'
+      fullPath: '/shoot-days/'
+      preLoaderRoute: typeof ShootDaysIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/episodes/$slug': {
@@ -71,17 +88,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
+  ShootDaysIndexRoute: ShootDaysIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
