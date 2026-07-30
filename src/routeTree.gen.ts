@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
+import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShootDaysIndexRoute = ShootDaysIndexRouteImport.update({
+  id: '/shoot-days/',
+  path: '/shoot-days/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShootDaysDayIdRoute = ShootDaysDayIdRouteImport.update({
+  id: '/shoot-days/$dayId',
+  path: '/shoot-days/$dayId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
@@ -26,27 +38,40 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
+  '/shoot-days/': typeof ShootDaysIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
+  '/shoot-days': typeof ShootDaysIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
+  '/shoot-days/': typeof ShootDaysIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/episodes/$slug'
+  fullPaths: '/' | '/episodes/$slug' | '/shoot-days/$dayId' | '/shoot-days/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/episodes/$slug'
-  id: '__root__' | '/' | '/episodes/$slug'
+  to: '/' | '/episodes/$slug' | '/shoot-days/$dayId' | '/shoot-days'
+  id:
+    | '__root__'
+    | '/'
+    | '/episodes/$slug'
+    | '/shoot-days/$dayId'
+    | '/shoot-days/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
+  ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
+  ShootDaysIndexRoute: typeof ShootDaysIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +81,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shoot-days/': {
+      id: '/shoot-days/'
+      path: '/shoot-days'
+      fullPath: '/shoot-days/'
+      preLoaderRoute: typeof ShootDaysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shoot-days/$dayId': {
+      id: '/shoot-days/$dayId'
+      path: '/shoot-days/$dayId'
+      fullPath: '/shoot-days/$dayId'
+      preLoaderRoute: typeof ShootDaysDayIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/episodes/$slug': {
@@ -71,6 +110,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
+  ShootDaysDayIdRoute: ShootDaysDayIdRoute,
+  ShootDaysIndexRoute: ShootDaysIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
