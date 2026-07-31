@@ -209,7 +209,15 @@ function TalentBank() {
               </span>
             </button>
           ))}
+          <Link
+            to="/talent/workflow"
+            className="ml-auto text-ink-muted hover:text-ink transition-colors duration-[var(--dur-fast)]"
+          >
+            Configure workflow
+            <span className="ml-2 tabular-nums text-ink-muted">{steps.length}</span>
+          </Link>
         </div>
+
 
         <div>
           {rows.map((t, i) => (
