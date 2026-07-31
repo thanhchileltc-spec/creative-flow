@@ -7,8 +7,11 @@ import {
   type ApprovalStatus,
   type TalentProfile,
 } from "@/lib/talent-bank";
+import { useWorkflow, progressFor, type WorkflowStep } from "@/lib/approval-workflow";
+import { ApprovalTrack } from "@/components/approval-track";
 
 type Filter = ApprovalStatus | "all";
+
 
 export const Route = createFileRoute("/talent/")({
   validateSearch: (search: Record<string, unknown>): { status?: Filter } => {
@@ -55,13 +58,14 @@ function FitBar({ score }: { score: number }) {
   );
 }
 
-function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
+function TalentRow({ t, delay, steps }: { t: TalentProfile; delay: number; steps: WorkflowStep[] }) {
   const lastCall = t.calls[t.calls.length - 1];
+  const p = progressFor(t.id, steps);
   return (
     <Link
       to="/talent/$talentId"
       params={{ talentId: t.id }}
-      className="group grid grid-cols-[1fr] md:grid-cols-[260px_1fr_150px_130px] gap-4 md:gap-8 border-t-hairline py-6 transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
+      className="group grid grid-cols-[1fr] md:grid-cols-[260px_1fr_150px_170px] gap-4 md:gap-8 border-t-hairline py-6 transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div>
@@ -107,6 +111,20 @@ function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
         <div className={`text-[13px] font-medium ${approvalClass(t.approval)}`}>
           {APPROVAL_LABEL[t.approval]}
         </div>
+        <div className="mt-2">
+          <ApprovalTrack talentId={t.id} steps={steps} />
+        </div>
+        <div className="text-[10px] mt-1 leading-snug">
+          {p.blocked ? (
+            <span className="text-warning">Blocked · {p.blocked.label}</span>
+          ) : p.current ? (
+            <span className="text-ink-muted">
+              Next · {p.current.label} ({p.current.owner})
+            </span>
+          ) : (
+            <span className="text-ink-muted">All steps cleared</span>
+          )}
+        </div>
         <div className="text-[10px] text-ink-muted mt-1 font-mono">
           {t.episodes.map((s) => episodeCode(s)).join(", ")}
         </div>
@@ -115,10 +133,13 @@ function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
   );
 }
 
+
 function TalentBank() {
   const { status = "all" } = Route.useSearch();
   const navigate = useNavigate();
+  const [steps] = useWorkflow();
   const rows = status === "all" ? TALENT : TALENT.filter((t) => t.approval === status);
+
   const needsAction = TALENT.filter(
     (t) => t.approval === "sourced" || t.approval === "call-scheduled" || t.approval === "in-review",
   ).length;
@@ -188,11 +209,19 @@ function TalentBank() {
               </span>
             </button>
           ))}
+          <Link
+            to="/talent/workflow"
+            className="ml-auto text-ink-muted hover:text-ink transition-colors duration-[var(--dur-fast)]"
+          >
+            Configure workflow
+            <span className="ml-2 tabular-nums text-ink-muted">{steps.length}</span>
+          </Link>
         </div>
+
 
         <div>
           {rows.map((t, i) => (
-            <TalentRow key={t.id} t={t} delay={80 + i * 50} />
+            <TalentRow key={t.id} t={t} delay={80 + i * 50} steps={steps} />
           ))}
           <div className="border-t-hairline" />
           {rows.length === 0 && (
