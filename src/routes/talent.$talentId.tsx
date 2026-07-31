@@ -73,6 +73,9 @@ function outcomeLabel(o: "advance" | "hold" | "pass") {
 
 function TalentDetail() {
   const { talent: t } = Route.useLoaderData() as { talent: TalentProfile };
+  const [steps] = useWorkflow();
+  const progress = progressFor(t.id, steps);
+
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
