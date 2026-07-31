@@ -110,12 +110,91 @@ function TalentDetail() {
             {t.craft} · {t.location}
           </div>
           <h1 className="text-[34px] font-bold tracking-[-0.03em] leading-tight">{t.name}</h1>
-          <div className={`text-[13px] font-medium mt-2 ${approvalClass(t.approval)}`}>
-            {APPROVAL_LABEL[t.approval]}
+          <div className="flex flex-wrap items-center gap-4 mt-2">
+            <span className={`text-[13px] font-medium ${approvalClass(t.approval)}`}>
+              {APPROVAL_LABEL[t.approval]}
+            </span>
+            <span className="text-[11px] text-ink-muted font-mono tabular-nums">
+              {progress.cleared}/{progress.total} steps cleared
+            </span>
           </div>
         </header>
 
+        {/* Approval workflow */}
+        <section className="mt-12 animate-reveal" style={{ animationDelay: "40ms" }}>
+          <div className="flex items-baseline justify-between mb-4">
+            <div className="text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted">
+              Approval workflow
+            </div>
+            <Link
+              to="/talent/workflow"
+              className="text-[11px] text-ink-muted hover:text-ink transition-colors duration-[var(--dur-fast)]"
+            >
+              Configure steps
+            </Link>
+          </div>
+
+          {steps.map((s, i) => {
+            const r = stepRecord(t.id, s.id);
+            return (
+              <div
+                key={s.id}
+                className="grid grid-cols-[24px_1fr_150px] gap-6 items-start border-t-hairline py-5"
+              >
+                <div className="pt-1">
+                  <span className={`block h-[3px] w-[16px] ${stateClass(r.state)}`} />
+                  <span className="block text-[9px] font-mono text-ink-muted mt-2 tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-[15px] font-bold tracking-[-0.02em]">
+                    {s.label}
+                    {!s.required && (
+                      <span className="ml-2 text-[10px] font-normal text-ink-muted uppercase tracking-[0.12em]">
+                        Optional
+                      </span>
+                    )}
+                  </div>
+                  {s.description && (
+                    <p className="text-[13px] text-ink-secondary mt-1 leading-snug max-w-[560px]">
+                      {s.description}
+                    </p>
+                  )}
+                  {r.note && (
+                    <p
+                      className={`text-[11px] mt-1 leading-snug ${
+                        r.state === "blocked" ? "text-warning" : "text-ink-muted"
+                      }`}
+                    >
+                      {r.note}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div
+                    className={`text-[13px] ${
+                      r.state === "blocked"
+                        ? "text-warning"
+                        : r.state === "cleared"
+                          ? "text-ink"
+                          : "text-ink-secondary"
+                    }`}
+                  >
+                    {STEP_STATE_LABEL[r.state]}
+                  </div>
+                  <div className="text-[10px] text-ink-muted font-mono mt-1">
+                    {r.by ? `${r.by}${r.date ? ` · ${r.date}` : ""}` : `Owner ${s.owner}`}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          <div className="border-t-hairline" />
+        </section>
+
         {/* Sourcing record */}
+
         <section
           className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-6 border-t-hairline animate-reveal"
           style={{ animationDelay: "60ms" }}
