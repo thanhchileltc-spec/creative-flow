@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "A minimal production platform for cinematic documentary storytelling." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Chi Les — Production Platform" },
+      { name: "twitter:description", content: "A minimal production platform for cinematic documentary storytelling." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/db4eaae9-d513-4d25-8136-41a5ceccef81/id-preview-62eacdc2--1c3c4e9e-ce5c-42b7-8754-276a08837466.lovable.app-1785474163515.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/db4eaae9-d513-4d25-8136-41a5ceccef81/id-preview-62eacdc2--1c3c4e9e-ce5c-42b7-8754-276a08837466.lovable.app-1785474163515.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
