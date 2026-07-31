@@ -7,8 +7,11 @@ import {
   type ApprovalStatus,
   type TalentProfile,
 } from "@/lib/talent-bank";
+import { useWorkflow, progressFor, type WorkflowStep } from "@/lib/approval-workflow";
+import { ApprovalTrack } from "@/components/approval-track";
 
 type Filter = ApprovalStatus | "all";
+
 
 export const Route = createFileRoute("/talent/")({
   validateSearch: (search: Record<string, unknown>): { status?: Filter } => {

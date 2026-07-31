@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
+import { Route as TalentWorkflowRouteImport } from './routes/talent.workflow'
 import { Route as TalentTalentIdRouteImport } from './routes/talent.$talentId'
 import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
@@ -29,6 +30,11 @@ const TalentIndexRoute = TalentIndexRouteImport.update({
 const ShootDaysIndexRoute = ShootDaysIndexRouteImport.update({
   id: '/shoot-days/',
   path: '/shoot-days/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentWorkflowRoute = TalentWorkflowRouteImport.update({
+  id: '/talent/workflow',
+  path: '/talent/workflow',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TalentTalentIdRoute = TalentTalentIdRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/workflow': typeof TalentWorkflowRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
   '/talent/': typeof TalentIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/workflow': typeof TalentWorkflowRoute
   '/shoot-days': typeof ShootDaysIndexRoute
   '/talent': typeof TalentIndexRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/workflow': typeof TalentWorkflowRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
   '/talent/': typeof TalentIndexRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/episodes/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/workflow'
     | '/shoot-days/'
     | '/talent/'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/episodes/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/workflow'
     | '/shoot-days'
     | '/talent'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/episodes/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/workflow'
     | '/shoot-days/'
     | '/talent/'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   EpisodesSlugRoute: typeof EpisodesSlugRoute
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
   TalentTalentIdRoute: typeof TalentTalentIdRoute
+  TalentWorkflowRoute: typeof TalentWorkflowRoute
   ShootDaysIndexRoute: typeof ShootDaysIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
 }
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/shoot-days'
       fullPath: '/shoot-days/'
       preLoaderRoute: typeof ShootDaysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/workflow': {
+      id: '/talent/workflow'
+      path: '/talent/workflow'
+      fullPath: '/talent/workflow'
+      preLoaderRoute: typeof TalentWorkflowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/talent/$talentId': {
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   EpisodesSlugRoute: EpisodesSlugRoute,
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,
   TalentTalentIdRoute: TalentTalentIdRoute,
+  TalentWorkflowRoute: TalentWorkflowRoute,
   ShootDaysIndexRoute: ShootDaysIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
 }
