@@ -58,13 +58,14 @@ function FitBar({ score }: { score: number }) {
   );
 }
 
-function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
+function TalentRow({ t, delay, steps }: { t: TalentProfile; delay: number; steps: WorkflowStep[] }) {
   const lastCall = t.calls[t.calls.length - 1];
+  const p = progressFor(t.id, steps);
   return (
     <Link
       to="/talent/$talentId"
       params={{ talentId: t.id }}
-      className="group grid grid-cols-[1fr] md:grid-cols-[260px_1fr_150px_130px] gap-4 md:gap-8 border-t-hairline py-6 transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
+      className="group grid grid-cols-[1fr] md:grid-cols-[260px_1fr_150px_170px] gap-4 md:gap-8 border-t-hairline py-6 transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)] hover:bg-surface animate-reveal"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div>
@@ -110,6 +111,20 @@ function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
         <div className={`text-[13px] font-medium ${approvalClass(t.approval)}`}>
           {APPROVAL_LABEL[t.approval]}
         </div>
+        <div className="mt-2">
+          <ApprovalTrack talentId={t.id} steps={steps} />
+        </div>
+        <div className="text-[10px] mt-1 leading-snug">
+          {p.blocked ? (
+            <span className="text-warning">Blocked · {p.blocked.label}</span>
+          ) : p.current ? (
+            <span className="text-ink-muted">
+              Next · {p.current.label} ({p.current.owner})
+            </span>
+          ) : (
+            <span className="text-ink-muted">All steps cleared</span>
+          )}
+        </div>
         <div className="text-[10px] text-ink-muted mt-1 font-mono">
           {t.episodes.map((s) => episodeCode(s)).join(", ")}
         </div>
@@ -117,6 +132,7 @@ function TalentRow({ t, delay }: { t: TalentProfile; delay: number }) {
     </Link>
   );
 }
+
 
 function TalentBank() {
   const { status = "all" } = Route.useSearch();
