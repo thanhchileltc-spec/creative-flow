@@ -137,7 +137,9 @@ function TalentRow({ t, delay, steps }: { t: TalentProfile; delay: number; steps
 function TalentBank() {
   const { status = "all" } = Route.useSearch();
   const navigate = useNavigate();
+  const [steps] = useWorkflow();
   const rows = status === "all" ? TALENT : TALENT.filter((t) => t.approval === status);
+
   const needsAction = TALENT.filter(
     (t) => t.approval === "sourced" || t.approval === "call-scheduled" || t.approval === "in-review",
   ).length;
