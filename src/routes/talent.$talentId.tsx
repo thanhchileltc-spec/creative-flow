@@ -7,6 +7,14 @@ import {
   type ApprovalStatus,
   type TalentProfile,
 } from "@/lib/talent-bank";
+import {
+  useWorkflow,
+  progressFor,
+  stepRecord,
+  STEP_STATE_LABEL,
+} from "@/lib/approval-workflow";
+import { stateClass } from "@/components/approval-track";
+
 
 export const Route = createFileRoute("/talent/$talentId")({
   loader: ({ params }): { talent: TalentProfile } => {
