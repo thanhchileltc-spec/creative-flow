@@ -213,7 +213,7 @@ function TalentBank() {
 
         <div>
           {rows.map((t, i) => (
-            <TalentRow key={t.id} t={t} delay={80 + i * 50} />
+            <TalentRow key={t.id} t={t} delay={80 + i * 50} steps={steps} />
           ))}
           <div className="border-t-hairline" />
           {rows.length === 0 && (
