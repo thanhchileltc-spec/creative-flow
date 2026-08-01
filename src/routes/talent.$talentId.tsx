@@ -97,6 +97,9 @@ function TalentDetail() {
             <Link to="/talent" className="text-ink">
               Talent Bank
             </Link>
+            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Editor Handoff
+            </Link>
           </div>
         </div>
         <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">

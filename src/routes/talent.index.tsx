@@ -166,6 +166,9 @@ function TalentBank() {
             <Link to="/talent" className="text-ink">
               Talent Bank
             </Link>
+            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Editor Handoff
+            </Link>
           </div>
         </div>
         <div className="text-[11px] text-ink-secondary">
