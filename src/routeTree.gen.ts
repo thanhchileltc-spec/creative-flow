@@ -16,6 +16,7 @@ import { Route as HandoffIndexRouteImport } from './routes/handoff.index'
 import { Route as TalentWorkflowRouteImport } from './routes/talent.workflow'
 import { Route as TalentTalentIdRouteImport } from './routes/talent.$talentId'
 import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
+import { Route as HandoffSlugRouteImport } from './routes/handoff.$slug'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +54,11 @@ const ShootDaysDayIdRoute = ShootDaysDayIdRouteImport.update({
   path: '/shoot-days/$dayId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HandoffSlugRoute = HandoffSlugRouteImport.update({
+  id: '/handoff/$slug',
+  path: '/handoff/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
   id: '/episodes/$slug',
   path: '/episodes/$slug',
@@ -62,6 +68,7 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
+  '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/episodes/$slug'
+    | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/episodes/$slug'
+    | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/episodes/$slug'
+    | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
+  HandoffSlugRoute: typeof HandoffSlugRoute
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
   TalentTalentIdRoute: typeof TalentTalentIdRoute
   TalentWorkflowRoute: typeof TalentWorkflowRoute
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShootDaysDayIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/handoff/$slug': {
+      id: '/handoff/$slug'
+      path: '/handoff/$slug'
+      fullPath: '/handoff/$slug'
+      preLoaderRoute: typeof HandoffSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/episodes/$slug': {
       id: '/episodes/$slug'
       path: '/episodes/$slug'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
+  HandoffSlugRoute: HandoffSlugRoute,
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,
   TalentTalentIdRoute: TalentTalentIdRoute,
   TalentWorkflowRoute: TalentWorkflowRoute,

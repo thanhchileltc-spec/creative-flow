@@ -101,6 +101,9 @@ function ShootDayDetail() {
             <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
               Talent Bank
             </Link>
+            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Editor Handoff
+            </Link>
           </div>
         </div>
         <Link
