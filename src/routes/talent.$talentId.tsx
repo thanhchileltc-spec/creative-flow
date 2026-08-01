@@ -55,9 +55,6 @@ export const Route = createFileRoute("/talent/$talentId")({
       <Link to="/talent" className="text-[13px] text-ink-secondary hover:text-ink mt-3 inline-block">
         Back to Talent Bank
       </Link>
-            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Editor Handoff
-            </Link>
     </div>
   ),
   component: TalentDetail,
@@ -99,6 +96,9 @@ function TalentDetail() {
             </Link>
             <Link to="/talent" className="text-ink">
               Talent Bank
+            </Link>
+            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Editor Handoff
             </Link>
           </div>
         </div>

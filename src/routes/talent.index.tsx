@@ -130,9 +130,6 @@ function TalentRow({ t, delay, steps }: { t: TalentProfile; delay: number; steps
         </div>
       </div>
     </Link>
-            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Editor Handoff
-            </Link>
   );
 }
 
@@ -168,6 +165,9 @@ function TalentBank() {
             </Link>
             <Link to="/talent" className="text-ink">
               Talent Bank
+            </Link>
+            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
+              Editor Handoff
             </Link>
           </div>
         </div>
