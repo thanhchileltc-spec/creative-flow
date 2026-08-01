@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
+import { Route as HandoffIndexRouteImport } from './routes/handoff.index'
 import { Route as TalentWorkflowRouteImport } from './routes/talent.workflow'
 import { Route as TalentTalentIdRouteImport } from './routes/talent.$talentId'
 import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
@@ -30,6 +31,11 @@ const TalentIndexRoute = TalentIndexRouteImport.update({
 const ShootDaysIndexRoute = ShootDaysIndexRouteImport.update({
   id: '/shoot-days/',
   path: '/shoot-days/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HandoffIndexRoute = HandoffIndexRouteImport.update({
+  id: '/handoff/',
+  path: '/handoff/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TalentWorkflowRoute = TalentWorkflowRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
+  '/handoff/': typeof HandoffIndexRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
   '/talent/': typeof TalentIndexRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
+  '/handoff': typeof HandoffIndexRoute
   '/shoot-days': typeof ShootDaysIndexRoute
   '/talent': typeof TalentIndexRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
   '/talent/workflow': typeof TalentWorkflowRoute
+  '/handoff/': typeof HandoffIndexRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
   '/talent/': typeof TalentIndexRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
+    | '/handoff/'
     | '/shoot-days/'
     | '/talent/'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
+    | '/handoff'
     | '/shoot-days'
     | '/talent'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
     | '/talent/workflow'
+    | '/handoff/'
     | '/shoot-days/'
     | '/talent/'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
   TalentTalentIdRoute: typeof TalentTalentIdRoute
   TalentWorkflowRoute: typeof TalentWorkflowRoute
+  HandoffIndexRoute: typeof HandoffIndexRoute
   ShootDaysIndexRoute: typeof ShootDaysIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
 }
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/shoot-days'
       fullPath: '/shoot-days/'
       preLoaderRoute: typeof ShootDaysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/handoff/': {
+      id: '/handoff/'
+      path: '/handoff'
+      fullPath: '/handoff/'
+      preLoaderRoute: typeof HandoffIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/talent/workflow': {
@@ -181,19 +201,10 @@ const rootRouteChildren: RootRouteChildren = {
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,
   TalentTalentIdRoute: TalentTalentIdRoute,
   TalentWorkflowRoute: TalentWorkflowRoute,
+  HandoffIndexRoute: HandoffIndexRoute,
   ShootDaysIndexRoute: ShootDaysIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
