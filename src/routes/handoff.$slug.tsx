@@ -106,13 +106,17 @@ function HandoffDetail() {
             </Link>
           </div>
         </div>
-        <Link
-          to="/handoff"
-          className="text-[11px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"
-        >
-          ← All handoffs
-        </Link>
+        <div className="flex items-center gap-8">
+          <RoleSwitcher />
+          <Link
+            to="/handoff"
+            className="text-[11px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"
+          >
+            ← All handoffs
+          </Link>
+        </div>
       </nav>
+
 
       <main className="px-8 py-16 max-w-[1120px] mx-auto">
         {/* Header */}
