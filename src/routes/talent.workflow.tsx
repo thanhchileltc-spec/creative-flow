@@ -89,7 +89,14 @@ function WorkflowSettings() {
             Every sourced talent moves through these gates in order. Rename, reorder, or add a step
             and the Talent Bank re-reads it everywhere.
           </p>
+          {locked && (
+            <p role="status" className="text-[11px] text-warning mt-3 max-w-[560px] leading-snug">
+              Read only — {ROLE_LABEL[role]} cannot change the workflow. Only{" "}
+              {ADMIN_ROLES.map((r) => ROLE_LABEL[r]).join(", ")} can configure gates.
+            </p>
+          )}
         </header>
+
 
         <section className="mt-12 animate-reveal" style={{ animationDelay: "60ms" }}>
           <div className="grid grid-cols-[24px_1fr_60px_90px_120px] gap-4 pb-3 text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted border-b-hairline">
