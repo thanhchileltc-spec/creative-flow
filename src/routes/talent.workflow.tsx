@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useWorkflow, newStep, type WorkflowStep } from "@/lib/approval-workflow";
+import { RoleSwitcher } from "@/components/role-switcher";
+import { ADMIN_ROLES, canConfigureWorkflow, ROLE_LABEL, useRole } from "@/lib/roles";
+
 
 export const Route = createFileRoute("/talent/workflow")({
   head: () => {
@@ -22,6 +25,10 @@ export const Route = createFileRoute("/talent/workflow")({
 
 function WorkflowSettings() {
   const [steps, setSteps, reset] = useWorkflow();
+  const [role] = useRole();
+  const locked = !canConfigureWorkflow(role);
+
+
 
   const patch = (i: number, next: Partial<WorkflowStep>) =>
     setSteps(steps.map((s, idx) => (idx === i ? { ...s, ...next } : s)));
@@ -61,9 +68,13 @@ function WorkflowSettings() {
             </Link>
           </div>
         </div>
-        <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
-          ← All talent
-        </Link>
+        <div className="flex items-center gap-6">
+          <RoleSwitcher />
+          <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
+            ← All talent
+          </Link>
+        </div>
+
       </nav>
 
       <main className="px-8 py-24 max-w-[1100px] mx-auto">
@@ -78,7 +89,14 @@ function WorkflowSettings() {
             Every sourced talent moves through these gates in order. Rename, reorder, or add a step
             and the Talent Bank re-reads it everywhere.
           </p>
+          {locked && (
+            <p role="status" className="text-[11px] text-warning mt-3 max-w-[560px] leading-snug">
+              Read only — {ROLE_LABEL[role]} cannot change the workflow. Only{" "}
+              {ADMIN_ROLES.map((r) => ROLE_LABEL[r]).join(", ")} can configure gates.
+            </p>
+          )}
         </header>
+
 
         <section className="mt-12 animate-reveal" style={{ animationDelay: "60ms" }}>
           <div className="grid grid-cols-[24px_1fr_60px_90px_120px] gap-4 pb-3 text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted border-b-hairline">
@@ -102,13 +120,15 @@ function WorkflowSettings() {
                 <input
                   value={s.label}
                   aria-label={`Step ${i + 1} name`}
+                  readOnly={locked}
                   onChange={(e) => patch(i, { label: e.target.value })}
-                  className="w-full bg-transparent text-[15px] font-bold tracking-[-0.02em] border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-1"
+                  className="w-full bg-transparent text-[15px] font-bold tracking-[-0.02em] border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-1 read-only:border-transparent"
                 />
                 <input
                   value={s.description}
                   aria-label={`Step ${i + 1} description`}
                   placeholder="What has to be true to clear this gate"
+                  readOnly={locked}
                   onChange={(e) => patch(i, { description: e.target.value })}
                   className="w-full bg-transparent text-[13px] text-ink-secondary placeholder:text-ink-muted outline-none mt-2"
                 />
@@ -117,13 +137,15 @@ function WorkflowSettings() {
               <input
                 value={s.owner}
                 aria-label={`Step ${i + 1} owner role`}
+                readOnly={locked}
                 onChange={(e) => patch(i, { owner: e.target.value.toUpperCase().slice(0, 3) })}
-                className="w-full bg-transparent text-[11px] font-mono uppercase border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-1"
+                className="w-full bg-transparent text-[11px] font-mono uppercase border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-1 read-only:border-transparent"
               />
 
               <button
                 onClick={() => patch(i, { required: !s.required })}
-                className={`text-[11px] text-left transition-colors duration-[var(--dur-fast)] ${
+                disabled={locked}
+                className={`text-[11px] text-left transition-colors duration-[var(--dur-fast)] disabled:cursor-default ${
                   s.required ? "text-ink" : "text-ink-muted"
                 }`}
               >
@@ -133,7 +155,7 @@ function WorkflowSettings() {
               <div className="flex justify-end gap-4 text-[11px] text-ink-muted">
                 <button
                   onClick={() => move(i, -1)}
-                  disabled={i === 0}
+                  disabled={locked || i === 0}
                   aria-label={`Move ${s.label} up`}
                   className="hover:text-ink disabled:opacity-30 disabled:hover:text-ink-muted"
                 >
@@ -141,7 +163,7 @@ function WorkflowSettings() {
                 </button>
                 <button
                   onClick={() => move(i, 1)}
-                  disabled={i === steps.length - 1}
+                  disabled={locked || i === steps.length - 1}
                   aria-label={`Move ${s.label} down`}
                   className="hover:text-ink disabled:opacity-30 disabled:hover:text-ink-muted"
                 >
@@ -149,7 +171,7 @@ function WorkflowSettings() {
                 </button>
                 <button
                   onClick={() => remove(i)}
-                  disabled={steps.length === 1}
+                  disabled={locked || steps.length === 1}
                   aria-label={`Remove ${s.label}`}
                   className="hover:text-warning disabled:opacity-30"
                 >
@@ -163,17 +185,20 @@ function WorkflowSettings() {
           <div className="flex items-center gap-6 mt-8">
             <button
               onClick={() => setSteps([...steps, newStep()])}
-              className="px-5 py-2 bg-ink text-canvas text-[13px] font-medium hover:bg-ink-secondary transition-colors duration-[var(--dur-fast)]"
+              disabled={locked}
+              className="px-5 py-2 bg-ink text-canvas text-[13px] font-medium hover:bg-ink-secondary transition-colors duration-[var(--dur-fast)] disabled:opacity-30"
             >
               Add step
             </button>
             <button
               onClick={reset}
-              className="text-[13px] text-ink-muted hover:text-ink transition-colors duration-[var(--dur-fast)]"
+              disabled={locked}
+              className="text-[13px] text-ink-muted hover:text-ink transition-colors duration-[var(--dur-fast)] disabled:opacity-30"
             >
               Reset to default
             </button>
           </div>
+
         </section>
       </main>
     </div>

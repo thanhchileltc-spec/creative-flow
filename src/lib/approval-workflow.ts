@@ -239,9 +239,62 @@ export const TALENT_STEPS: Record<string, Record<string, StepRecord>> = {
   },
 };
 
-export function stepRecord(talentId: string, stepId: string): StepRecord {
-  return TALENT_STEPS[talentId]?.[stepId] ?? { state: "pending" };
+/* ------------------------------------------------- per-talent overrides */
+
+const RECORD_KEY = "chi-les.step-records.v1";
+const RECORD_EVENT = "chi-les:step-record-change";
+
+type Overrides = Record<string, StepRecord>;
+let OVERRIDES: Overrides = {};
+
+function key(talentId: string, stepId: string) {
+  return `${talentId}::${stepId}`;
 }
+
+function loadOverrides(): Overrides {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(RECORD_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" ? (parsed as Overrides) : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Records a decision on a step. Permission checks live in `@/lib/roles`. */
+export function setStepRecord(talentId: string, stepId: string, record: StepRecord) {
+  if (typeof window === "undefined") return;
+  OVERRIDES = { ...loadOverrides(), [key(talentId, stepId)]: record };
+  window.localStorage.setItem(RECORD_KEY, JSON.stringify(OVERRIDES));
+  window.dispatchEvent(new Event(RECORD_EVENT));
+}
+
+/** Subscribes to recorded decisions; returns a version that changes on write. */
+export function useStepRecords(): number {
+  const [version, setVersion] = useState(0);
+  useEffect(() => {
+    const sync = () => {
+      OVERRIDES = loadOverrides();
+      setVersion((v) => v + 1);
+    };
+    sync();
+    window.addEventListener(RECORD_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(RECORD_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+  return version;
+}
+
+export function stepRecord(talentId: string, stepId: string): StepRecord {
+  return (
+    OVERRIDES[key(talentId, stepId)] ?? TALENT_STEPS[talentId]?.[stepId] ?? { state: "pending" }
+  );
+}
+
 
 export type WorkflowProgress = {
   cleared: number;

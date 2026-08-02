@@ -11,9 +11,16 @@ import {
   useWorkflow,
   progressFor,
   stepRecord,
+  setStepRecord,
+  useStepRecords,
   STEP_STATE_LABEL,
+  type StepState,
+  type WorkflowStep,
 } from "@/lib/approval-workflow";
 import { stateClass } from "@/components/approval-track";
+import { RoleSwitcher } from "@/components/role-switcher";
+import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
+
 
 
 export const Route = createFileRoute("/talent/$talentId")({
@@ -71,10 +78,87 @@ function outcomeLabel(o: "advance" | "hold" | "pass") {
   return o === "advance" ? "Advance" : o === "hold" ? "Hold" : "Pass";
 }
 
+function today() {
+  return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+}
+
+/** Right-hand column: state + the controls the acting role is allowed to use. */
+function StepControls({
+  talentId,
+  step,
+  role,
+}: {
+  talentId: string;
+  step: WorkflowStep;
+  role: Role;
+}) {
+  const r = stepRecord(talentId, step.id);
+  const can = canActOnStep(role, step);
+  const options = allowedStates(role, step);
+
+  const set = (state: StepState) =>
+    setStepRecord(talentId, step.id, { ...r, state, by: role, date: today() });
+
+  return (
+    <div className="text-right">
+      <div
+        className={`text-[13px] ${
+          r.state === "blocked"
+            ? "text-warning"
+            : r.state === "cleared"
+              ? "text-ink"
+              : "text-ink-secondary"
+        }`}
+      >
+        {STEP_STATE_LABEL[r.state]}
+      </div>
+      <div className="text-[10px] text-ink-muted font-mono mt-1">
+        {r.by ? `${r.by}${r.date ? ` · ${r.date}` : ""}` : `Owner ${step.owner}`}
+      </div>
+
+      {can ? (
+        <div className="mt-3 flex flex-col items-end gap-2">
+          <label className="sr-only" htmlFor={`state-${step.id}`}>
+            {step.label} state
+          </label>
+          <select
+            id={`state-${step.id}`}
+            value={r.state}
+            onChange={(e) => set(e.target.value as StepState)}
+            className="bg-transparent text-[11px] text-ink text-right border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-[2px]"
+          >
+            {options.map((o) => (
+              <option key={o} value={o}>
+                {STEP_STATE_LABEL[o]}
+              </option>
+            ))}
+          </select>
+          {r.state !== "cleared" && (
+            <button
+              onClick={() => set("cleared")}
+              className="px-3 py-1 bg-ink text-canvas text-[11px] font-medium hover:bg-ink-secondary transition-colors duration-[var(--dur-fast)]"
+            >
+              Advance
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="mt-3 text-[10px] text-ink-muted leading-snug max-w-[150px] ml-auto">
+          {denialReason(role, step)}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TalentDetail() {
   const { talent: t } = Route.useLoaderData() as { talent: TalentProfile };
   const [steps] = useWorkflow();
+  const [role] = useRole();
+  useStepRecords();
   const progress = progressFor(t.id, steps);
+
+
 
 
   return (
@@ -102,9 +186,13 @@ function TalentDetail() {
             </Link>
           </div>
         </div>
-        <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
-          ← All talent
-        </Link>
+        <div className="flex items-center gap-6">
+          <RoleSwitcher />
+          <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
+            ← All talent
+          </Link>
+        </div>
+
       </nav>
 
       <main className="px-8 py-24 max-w-[1100px] mx-auto">
@@ -174,22 +262,8 @@ function TalentDetail() {
                     </p>
                   )}
                 </div>
-                <div className="text-right">
-                  <div
-                    className={`text-[13px] ${
-                      r.state === "blocked"
-                        ? "text-warning"
-                        : r.state === "cleared"
-                          ? "text-ink"
-                          : "text-ink-secondary"
-                    }`}
-                  >
-                    {STEP_STATE_LABEL[r.state]}
-                  </div>
-                  <div className="text-[10px] text-ink-muted font-mono mt-1">
-                    {r.by ? `${r.by}${r.date ? ` · ${r.date}` : ""}` : `Owner ${s.owner}`}
-                  </div>
-                </div>
+                <StepControls talentId={t.id} step={s} role={role} />
+
               </div>
             );
           })}

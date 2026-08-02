@@ -7,8 +7,10 @@ import {
   type ApprovalStatus,
   type TalentProfile,
 } from "@/lib/talent-bank";
-import { useWorkflow, progressFor, type WorkflowStep } from "@/lib/approval-workflow";
+import { useWorkflow, progressFor, useStepRecords, type WorkflowStep } from "@/lib/approval-workflow";
 import { ApprovalTrack } from "@/components/approval-track";
+import { RoleSwitcher } from "@/components/role-switcher";
+
 
 type Filter = ApprovalStatus | "all";
 
@@ -138,7 +140,9 @@ function TalentBank() {
   const { status = "all" } = Route.useSearch();
   const navigate = useNavigate();
   const [steps] = useWorkflow();
+  useStepRecords();
   const rows = status === "all" ? TALENT : TALENT.filter((t) => t.approval === status);
+
 
   const needsAction = TALENT.filter(
     (t) => t.approval === "sourced" || t.approval === "call-scheduled" || t.approval === "in-review",
@@ -171,12 +175,16 @@ function TalentBank() {
             </Link>
           </div>
         </div>
-        <div className="text-[11px] text-ink-secondary">
-          <span className="text-warning font-bold tabular-nums">
-            {String(needsAction).padStart(2, "0")}
-          </span>{" "}
-          awaiting decision
+        <div className="flex items-center gap-6">
+          <RoleSwitcher />
+          <div className="text-[11px] text-ink-secondary">
+            <span className="text-warning font-bold tabular-nums">
+              {String(needsAction).padStart(2, "0")}
+            </span>{" "}
+            awaiting decision
+          </div>
         </div>
+
       </nav>
 
       <main className="px-8 py-24 max-w-[1440px] mx-auto">
