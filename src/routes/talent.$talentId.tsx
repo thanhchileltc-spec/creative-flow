@@ -11,9 +11,16 @@ import {
   useWorkflow,
   progressFor,
   stepRecord,
+  setStepRecord,
+  useStepRecords,
   STEP_STATE_LABEL,
+  type StepState,
+  type WorkflowStep,
 } from "@/lib/approval-workflow";
 import { stateClass } from "@/components/approval-track";
+import { RoleSwitcher } from "@/components/role-switcher";
+import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
+
 
 
 export const Route = createFileRoute("/talent/$talentId")({
