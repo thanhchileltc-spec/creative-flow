@@ -68,9 +68,13 @@ function WorkflowSettings() {
             </Link>
           </div>
         </div>
-        <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
-          ← All talent
-        </Link>
+        <div className="flex items-center gap-6">
+          <RoleSwitcher />
+          <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
+            ← All talent
+          </Link>
+        </div>
+
       </nav>
 
       <main className="px-8 py-24 max-w-[1100px] mx-auto">
