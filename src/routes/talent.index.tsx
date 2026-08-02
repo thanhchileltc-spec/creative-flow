@@ -140,7 +140,9 @@ function TalentBank() {
   const { status = "all" } = Route.useSearch();
   const navigate = useNavigate();
   const [steps] = useWorkflow();
+  useStepRecords();
   const rows = status === "all" ? TALENT : TALENT.filter((t) => t.approval === status);
+
 
   const needsAction = TALENT.filter(
     (t) => t.approval === "sourced" || t.approval === "call-scheduled" || t.approval === "in-review",
