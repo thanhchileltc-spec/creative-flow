@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useWorkflow, newStep, type WorkflowStep } from "@/lib/approval-workflow";
+import { RoleSwitcher } from "@/components/role-switcher";
+import { ADMIN_ROLES, canConfigureWorkflow, ROLE_LABEL, useRole } from "@/lib/roles";
+
 
 export const Route = createFileRoute("/talent/workflow")({
   head: () => {
