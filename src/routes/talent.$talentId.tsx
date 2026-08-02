@@ -258,22 +258,8 @@ function TalentDetail() {
                     </p>
                   )}
                 </div>
-                <div className="text-right">
-                  <div
-                    className={`text-[13px] ${
-                      r.state === "blocked"
-                        ? "text-warning"
-                        : r.state === "cleared"
-                          ? "text-ink"
-                          : "text-ink-secondary"
-                    }`}
-                  >
-                    {STEP_STATE_LABEL[r.state]}
-                  </div>
-                  <div className="text-[10px] text-ink-muted font-mono mt-1">
-                    {r.by ? `${r.by}${r.date ? ` · ${r.date}` : ""}` : `Owner ${s.owner}`}
-                  </div>
-                </div>
+                <StepControls talentId={t.id} step={s} role={role} />
+
               </div>
             );
           })}
