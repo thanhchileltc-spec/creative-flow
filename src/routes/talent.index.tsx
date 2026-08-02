@@ -175,12 +175,16 @@ function TalentBank() {
             </Link>
           </div>
         </div>
-        <div className="text-[11px] text-ink-secondary">
-          <span className="text-warning font-bold tabular-nums">
-            {String(needsAction).padStart(2, "0")}
-          </span>{" "}
-          awaiting decision
+        <div className="flex items-center gap-6">
+          <RoleSwitcher />
+          <div className="text-[11px] text-ink-secondary">
+            <span className="text-warning font-bold tabular-nums">
+              {String(needsAction).padStart(2, "0")}
+            </span>{" "}
+            awaiting decision
+          </div>
         </div>
+
       </nav>
 
       <main className="px-8 py-24 max-w-[1440px] mx-auto">
