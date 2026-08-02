@@ -7,8 +7,10 @@ import {
   type ApprovalStatus,
   type TalentProfile,
 } from "@/lib/talent-bank";
-import { useWorkflow, progressFor, type WorkflowStep } from "@/lib/approval-workflow";
+import { useWorkflow, progressFor, useStepRecords, type WorkflowStep } from "@/lib/approval-workflow";
 import { ApprovalTrack } from "@/components/approval-track";
+import { RoleSwitcher } from "@/components/role-switcher";
+
 
 type Filter = ApprovalStatus | "all";
 
