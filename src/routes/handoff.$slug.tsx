@@ -9,6 +9,8 @@ import {
   type Handoff,
 } from "@/lib/handoff";
 import type { Episode } from "@/lib/episodes";
+import { HandoffFeedback } from "@/components/handoff-feedback";
+import { RoleSwitcher } from "@/components/role-switcher";
 
 export const Route = createFileRoute("/handoff/$slug")({
   loader: ({ params }) => {
@@ -104,13 +106,17 @@ function HandoffDetail() {
             </Link>
           </div>
         </div>
-        <Link
-          to="/handoff"
-          className="text-[11px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"
-        >
-          ← All handoffs
-        </Link>
+        <div className="flex items-center gap-8">
+          <RoleSwitcher />
+          <Link
+            to="/handoff"
+            className="text-[11px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"
+          >
+            ← All handoffs
+          </Link>
+        </div>
       </nav>
+
 
       <main className="px-8 py-16 max-w-[1120px] mx-auto">
         {/* Header */}
@@ -333,7 +339,13 @@ function HandoffDetail() {
             <div className="border-t-hairline" />
           </div>
         </section>
+
+        <HandoffFeedback
+          slug={handoff.slug}
+          extraTargets={handoff.checklist.map((c) => c.label)}
+        />
       </main>
+
     </div>
   );
 }
