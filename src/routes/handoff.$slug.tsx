@@ -339,7 +339,13 @@ function HandoffDetail() {
             <div className="border-t-hairline" />
           </div>
         </section>
+
+        <HandoffFeedback
+          slug={handoff.slug}
+          extraTargets={handoff.checklist.map((c) => c.label)}
+        />
       </main>
+
     </div>
   );
 }
