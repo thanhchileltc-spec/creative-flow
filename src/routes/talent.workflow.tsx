@@ -25,6 +25,10 @@ export const Route = createFileRoute("/talent/workflow")({
 
 function WorkflowSettings() {
   const [steps, setSteps, reset] = useWorkflow();
+  const [role] = useRole();
+  const locked = !canConfigureWorkflow(role);
+
+
 
   const patch = (i: number, next: Partial<WorkflowStep>) =>
     setSteps(steps.map((s, idx) => (idx === i ? { ...s, ...next } : s)));
