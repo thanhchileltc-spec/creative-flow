@@ -1,4 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import {
+  allChecklistFixed,
+  applyFeedbackToApprovals,
+  feedbackSignature,
+  lastSync,
+  type SyncAction,
+} from "@/lib/feedback-sync";
 import {
   FEEDBACK_STATES,
   FEEDBACK_STATE_LABEL,
