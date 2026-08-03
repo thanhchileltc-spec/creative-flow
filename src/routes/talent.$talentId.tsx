@@ -414,7 +414,21 @@ function TalentDetail() {
           ))}
           <div className="border-t-hairline" />
         </section>
+
+        {/* Audit log */}
+        <section className="mt-14 animate-reveal" style={{ animationDelay: "220ms" }}>
+          <div className="flex items-baseline justify-between mb-4">
+            <div className="text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted">
+              Approval audit log
+            </div>
+            <Link to="/talent/audit" className="text-[11px] text-ink-secondary hover:text-ink">
+              Full log →
+            </Link>
+          </div>
+          <AuditTrail entries={audit} emptyLabel="No approval changes recorded for this talent yet." />
+        </section>
       </main>
+
     </div>
   );
 }
