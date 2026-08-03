@@ -44,6 +44,19 @@ export function HandoffFeedback({
 
   const visible = filter === "all" ? notes : notes.filter((n) => n.state === filter);
 
+  /* Resolved checklist feedback releases / advances the approval workflow. */
+  const cleared = allChecklistFixed(notes, extraTargets);
+  const signature = feedbackSignature(notes, extraTargets);
+  const [actions, setActions] = useState<SyncAction[]>([]);
+
+  useEffect(() => {
+    if (!cleared) {
+      setActions(lastSync(slug)?.signature === signature ? (lastSync(slug)?.actions ?? []) : []);
+      return;
+    }
+    setActions(applyFeedbackToApprovals({ slug, signature, by: role }));
+  }, [cleared, signature, slug, role]);
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!body.trim()) return;
@@ -61,6 +74,39 @@ export function HandoffFeedback({
           {counts.open} open · {counts.blocked} blocked · {counts.fixed} fixed
         </span>
       </div>
+
+      {/* Workflow sync */}
+      {cleared ? (
+        <div className="border-t-hairline border-b-hairline py-5 mb-8">
+          <div className="text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted mb-2">
+            Approval workflow updated
+          </div>
+          {actions.length === 0 ? (
+            <p className="text-[13px] text-ink-secondary max-w-[62ch]">
+              All checklist feedback is marked fixed — no approval gate on this episode needed
+              releasing.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {actions.map((a) => (
+                <li key={`${a.talentId}-${a.stepId}`} className="text-[13px] text-ink">
+                  <Link
+                    to="/talent/$talentId"
+                    params={{ talentId: a.talentId }}
+                    className="border-b-hairline border-b-[color:var(--color-ink)] hover:opacity-60 transition-opacity"
+                  >
+                    {a.talentName}
+                  </Link>{" "}
+                  <span className="text-ink-secondary">
+                    — {a.stepLabel} {a.kind === "unblocked" ? "released from blocked" : "advanced to cleared"} · {a.at}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : null}
+
 
       {/* Compose */}
       <form onSubmit={submit} className="border-t-hairline pt-6">
