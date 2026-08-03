@@ -14,6 +14,7 @@ import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
 import { Route as HandoffIndexRouteImport } from './routes/handoff.index'
 import { Route as TalentWorkflowRouteImport } from './routes/talent.workflow'
+import { Route as TalentAuditRouteImport } from './routes/talent.audit'
 import { Route as TalentTalentIdRouteImport } from './routes/talent.$talentId'
 import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
 import { Route as HandoffSlugRouteImport } from './routes/handoff.$slug'
@@ -44,6 +45,11 @@ const TalentWorkflowRoute = TalentWorkflowRouteImport.update({
   path: '/talent/workflow',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TalentAuditRoute = TalentAuditRouteImport.update({
+  id: '/talent/audit',
+  path: '/talent/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TalentTalentIdRoute = TalentTalentIdRouteImport.update({
   id: '/talent/$talentId',
   path: '/talent/$talentId',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/audit': typeof TalentAuditRoute
   '/talent/workflow': typeof TalentWorkflowRoute
   '/handoff/': typeof HandoffIndexRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/audit': typeof TalentAuditRoute
   '/talent/workflow': typeof TalentWorkflowRoute
   '/handoff': typeof HandoffIndexRoute
   '/shoot-days': typeof ShootDaysIndexRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
   '/talent/$talentId': typeof TalentTalentIdRoute
+  '/talent/audit': typeof TalentAuditRoute
   '/talent/workflow': typeof TalentWorkflowRoute
   '/handoff/': typeof HandoffIndexRoute
   '/shoot-days/': typeof ShootDaysIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/audit'
     | '/talent/workflow'
     | '/handoff/'
     | '/shoot-days/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/audit'
     | '/talent/workflow'
     | '/handoff'
     | '/shoot-days'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
     | '/talent/$talentId'
+    | '/talent/audit'
     | '/talent/workflow'
     | '/handoff/'
     | '/shoot-days/'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   HandoffSlugRoute: typeof HandoffSlugRoute
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
   TalentTalentIdRoute: typeof TalentTalentIdRoute
+  TalentAuditRoute: typeof TalentAuditRoute
   TalentWorkflowRoute: typeof TalentWorkflowRoute
   HandoffIndexRoute: typeof HandoffIndexRoute
   ShootDaysIndexRoute: typeof ShootDaysIndexRoute
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentWorkflowRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/talent/audit': {
+      id: '/talent/audit'
+      path: '/talent/audit'
+      fullPath: '/talent/audit'
+      preLoaderRoute: typeof TalentAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/talent/$talentId': {
       id: '/talent/$talentId'
       path: '/talent/$talentId'
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   HandoffSlugRoute: HandoffSlugRoute,
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,
   TalentTalentIdRoute: TalentTalentIdRoute,
+  TalentAuditRoute: TalentAuditRoute,
   TalentWorkflowRoute: TalentWorkflowRoute,
   HandoffIndexRoute: HandoffIndexRoute,
   ShootDaysIndexRoute: ShootDaysIndexRoute,

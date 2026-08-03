@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   getTalent,
@@ -20,6 +21,9 @@ import {
 import { stateClass } from "@/components/approval-track";
 import { RoleSwitcher } from "@/components/role-switcher";
 import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
+import { recordAudit, useAuditLog } from "@/lib/audit-log";
+import { AuditTrail } from "@/components/audit-trail";
+
 
 
 
@@ -85,19 +89,41 @@ function today() {
 /** Right-hand column: state + the controls the acting role is allowed to use. */
 function StepControls({
   talentId,
+  talentName,
   step,
   role,
 }: {
   talentId: string;
+  talentName: string;
   step: WorkflowStep;
   role: Role;
 }) {
   const r = stepRecord(talentId, step.id);
   const can = canActOnStep(role, step);
   const options = allowedStates(role, step);
+  const [note, setNote] = useState("");
 
-  const set = (state: StepState) =>
-    setStepRecord(talentId, step.id, { ...r, state, by: role, date: today() });
+  const set = (state: StepState) => {
+    const trimmed = note.trim();
+    setStepRecord(talentId, step.id, {
+      ...r,
+      state,
+      by: role,
+      date: today(),
+      note: trimmed || r.note,
+    });
+    recordAudit({
+      talentId,
+      talentName,
+      stepId: step.id,
+      stepLabel: step.label,
+      from: r.state,
+      to: state,
+      by: role,
+      note: trimmed || undefined,
+    });
+    setNote("");
+  };
 
   return (
     <div className="text-right">
@@ -118,6 +144,16 @@ function StepControls({
 
       {can ? (
         <div className="mt-3 flex flex-col items-end gap-2">
+          <label className="sr-only" htmlFor={`note-${step.id}`}>
+            Note for {step.label}
+          </label>
+          <input
+            id={`note-${step.id}`}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Note for the log"
+            className="w-[170px] bg-transparent text-[11px] text-ink text-right placeholder:text-ink-muted border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-[2px]"
+          />
           <label className="sr-only" htmlFor={`state-${step.id}`}>
             {step.label} state
           </label>
@@ -151,11 +187,13 @@ function StepControls({
   );
 }
 
+
 function TalentDetail() {
   const { talent: t } = Route.useLoaderData() as { talent: TalentProfile };
   const [steps] = useWorkflow();
   const [role] = useRole();
   useStepRecords();
+  const audit = useAuditLog(t.id);
   const progress = progressFor(t.id, steps);
 
 
@@ -262,7 +300,7 @@ function TalentDetail() {
                     </p>
                   )}
                 </div>
-                <StepControls talentId={t.id} step={s} role={role} />
+                <StepControls talentId={t.id} talentName={t.name} step={s} role={role} />
 
               </div>
             );
@@ -377,7 +415,21 @@ function TalentDetail() {
           ))}
           <div className="border-t-hairline" />
         </section>
+
+        {/* Audit log */}
+        <section className="mt-14 animate-reveal" style={{ animationDelay: "220ms" }}>
+          <div className="flex items-baseline justify-between mb-4">
+            <div className="text-[8px] font-bold uppercase tracking-[0.12em] text-ink-muted">
+              Approval audit log
+            </div>
+            <Link to="/talent/audit" className="text-[11px] text-ink-secondary hover:text-ink">
+              Full log →
+            </Link>
+          </div>
+          <AuditTrail entries={audit} emptyLabel="No approval changes recorded for this talent yet." />
+        </section>
       </main>
+
     </div>
   );
 }
