@@ -21,6 +21,9 @@ import {
 import { stateClass } from "@/components/approval-track";
 import { RoleSwitcher } from "@/components/role-switcher";
 import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
+import { recordAudit, useAuditLog } from "@/lib/audit-log";
+import { AuditTrail } from "@/components/audit-trail";
+
 
 
 
