@@ -85,19 +85,41 @@ function today() {
 /** Right-hand column: state + the controls the acting role is allowed to use. */
 function StepControls({
   talentId,
+  talentName,
   step,
   role,
 }: {
   talentId: string;
+  talentName: string;
   step: WorkflowStep;
   role: Role;
 }) {
   const r = stepRecord(talentId, step.id);
   const can = canActOnStep(role, step);
   const options = allowedStates(role, step);
+  const [note, setNote] = useState("");
 
-  const set = (state: StepState) =>
-    setStepRecord(talentId, step.id, { ...r, state, by: role, date: today() });
+  const set = (state: StepState) => {
+    const trimmed = note.trim();
+    setStepRecord(talentId, step.id, {
+      ...r,
+      state,
+      by: role,
+      date: today(),
+      note: trimmed || r.note,
+    });
+    recordAudit({
+      talentId,
+      talentName,
+      stepId: step.id,
+      stepLabel: step.label,
+      from: r.state,
+      to: state,
+      by: role,
+      note: trimmed || undefined,
+    });
+    setNote("");
+  };
 
   return (
     <div className="text-right">
@@ -118,6 +140,16 @@ function StepControls({
 
       {can ? (
         <div className="mt-3 flex flex-col items-end gap-2">
+          <label className="sr-only" htmlFor={`note-${step.id}`}>
+            Note for {step.label}
+          </label>
+          <input
+            id={`note-${step.id}`}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Note for the log"
+            className="w-[170px] bg-transparent text-[11px] text-ink text-right placeholder:text-ink-muted border-b-hairline border-[color:var(--color-border)] focus:border-[color:var(--color-ink)] outline-none pb-[2px]"
+          />
           <label className="sr-only" htmlFor={`state-${step.id}`}>
             {step.label} state
           </label>
@@ -150,6 +182,7 @@ function StepControls({
     </div>
   );
 }
+
 
 function TalentDetail() {
   const { talent: t } = Route.useLoaderData() as { talent: TalentProfile };
