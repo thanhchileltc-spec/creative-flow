@@ -299,7 +299,7 @@ function TalentDetail() {
                     </p>
                   )}
                 </div>
-                <StepControls talentId={t.id} step={s} role={role} />
+                <StepControls talentId={t.id} talentName={t.name} step={s} role={role} />
 
               </div>
             );
