@@ -193,6 +193,7 @@ function TalentDetail() {
   const [steps] = useWorkflow();
   const [role] = useRole();
   useStepRecords();
+  const audit = useAuditLog(t.id);
   const progress = progressFor(t.id, steps);
 
 
