@@ -97,6 +97,7 @@ function Pipeline() {
           <span className="text-[13px] font-bold tracking-[-0.02em]">Chi Les</span>
           <div className="hidden md:flex gap-8 text-[13px] text-ink-secondary">
             <a href="#" className="text-ink">Episodes</a>
+            <Link to="/gantt" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Gantt</Link>
             <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Shoot Days</Link>
 
             <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Talent Bank</Link>
