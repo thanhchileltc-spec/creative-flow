@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GanttRouteImport } from './routes/gantt'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
@@ -21,6 +22,11 @@ import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
 import { Route as HandoffSlugRouteImport } from './routes/handoff.$slug'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 
+const GanttRoute = GanttRouteImport.update({
+  id: '/gantt',
+  path: '/gantt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,6 +85,7 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GanttRoute: typeof GanttRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
   HandoffSlugRoute: typeof HandoffSlugRoute
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
@@ -175,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/gantt': {
+      id: '/gantt'
+      path: '/gantt'
+      fullPath: '/gantt'
+      preLoaderRoute: typeof GanttRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -257,6 +277,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GanttRoute: GanttRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
   HandoffSlugRoute: HandoffSlugRoute,
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,
