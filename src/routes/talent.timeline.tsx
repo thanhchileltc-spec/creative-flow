@@ -156,6 +156,7 @@ function ApprovalTimeline() {
   const [steps] = useWorkflow();
   useStepRecords();
   const log = useAuditLog();
+  const [selection, setSelection] = useState<GateSelection>(null);
 
   const blockedCount = TALENT.filter((t) => progressFor(t.id, steps).blocked).length;
   const completeCount = TALENT.filter((t) => progressFor(t.id, steps).complete).length;
