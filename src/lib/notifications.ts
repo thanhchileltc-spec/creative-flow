@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Role } from "./roles";
 import { loadWorkflow, progressFor } from "./approval-workflow";
-import { talentForEpisode } from "./talent-bank";
-import { episodeTitle } from "./talent-bank";
+import { episodeTitle, talentForEpisode } from "./talent-bank";
 
 /** An in-app notification addressed to one production role. */
 export type Notification = {
