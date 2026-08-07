@@ -61,6 +61,7 @@ function Row({
   steps,
   delay,
   lastAt,
+  onSelect,
 }: {
   talentId: string;
   name: string;
@@ -68,6 +69,7 @@ function Row({
   steps: WorkflowStep[];
   delay: number;
   lastAt?: string;
+  onSelect: (stepId: string) => void;
 }) {
   const p = progressFor(talentId, steps);
   const status = derivedStatus(talentId, steps);
