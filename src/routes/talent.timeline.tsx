@@ -13,6 +13,7 @@ import {
 } from "@/lib/approval-workflow";
 import { useAuditLog } from "@/lib/audit-log";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { GateDetailPanel, type GateSelection } from "@/components/gate-detail-panel";
 
 export const Route = createFileRoute("/talent/timeline")({
   head: () => {
