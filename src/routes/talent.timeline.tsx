@@ -114,7 +114,13 @@ function Row({
             const r = stepRecord(talentId, s.id);
             const c = CELL[r.state];
             return (
-              <div key={s.id} className="relative">
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => onSelect(s.id)}
+                aria-label={`${s.label} — ${STEP_STATE_LABEL[r.state]} for ${name}. Open gate details.`}
+                className="relative text-left cursor-pointer -mx-1 px-1 pb-1 rounded-[2px] hover:bg-ink/[0.03] focus:outline-none focus-visible:ring-1 focus-visible:ring-ink/30 transition-colors duration-[var(--dur-fast)]"
+              >
                 <div className="flex items-center">
                   <span className={`block h-[9px] w-[9px] rounded-full shrink-0 ${c.dot}`} />
                   {i < steps.length - 1 && <span className={`block h-[1.5px] flex-1 ${c.line}`} />}
@@ -133,7 +139,7 @@ function Row({
                     <p className="text-[9px] text-ink-muted leading-snug mt-1 pr-1">{r.note}</p>
                   )}
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
