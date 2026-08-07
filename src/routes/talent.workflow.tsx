@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useWorkflow, newStep, type WorkflowStep } from "@/lib/approval-workflow";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 import { ADMIN_ROLES, canConfigureWorkflow, ROLE_LABEL, useRole } from "@/lib/roles";
 
 
@@ -70,6 +71,7 @@ function WorkflowSettings() {
         </div>
         <div className="flex items-center gap-6">
           <RoleSwitcher />
+          <NotificationBell />
           <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
             ← All talent
           </Link>

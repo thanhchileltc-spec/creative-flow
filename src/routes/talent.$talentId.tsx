@@ -20,6 +20,7 @@ import {
 } from "@/lib/approval-workflow";
 import { stateClass } from "@/components/approval-track";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
 import { recordAudit, useAuditLog } from "@/lib/audit-log";
 import { AuditTrail } from "@/components/audit-trail";
@@ -226,6 +227,7 @@ function TalentDetail() {
         </div>
         <div className="flex items-center gap-6">
           <RoleSwitcher />
+          <NotificationBell />
           <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
             ← All talent
           </Link>

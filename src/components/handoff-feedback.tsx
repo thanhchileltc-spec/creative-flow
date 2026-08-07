@@ -16,6 +16,7 @@ import {
   type FeedbackState,
 } from "@/lib/handoff-feedback";
 import { isAdmin, useRole, ROLE_LABEL } from "@/lib/roles";
+import { notifyOwners } from "@/lib/notifications";
 
 function stateClass(s: FeedbackState) {
   if (s === "blocked") return "text-warning";
@@ -61,6 +62,7 @@ export function HandoffFeedback({
     e.preventDefault();
     if (!body.trim()) return;
     add({ target, body, by: role });
+    notifyOwners({ slug, from: role, kind: "feedback-added", target, body });
     setBody("");
   };
 
@@ -224,7 +226,21 @@ export function HandoffFeedback({
                       {FEEDBACK_STATES.filter((s) => s !== n.state).map((s) => (
                         <button
                           key={s}
-                          onClick={() => setState(n.id, s, role)}
+                          onClick={() => {
+                            setState(n.id, s, role);
+                            notifyOwners({
+                              slug,
+                              from: role,
+                              kind:
+                                s === "fixed"
+                                  ? "feedback-fixed"
+                                  : s === "blocked"
+                                    ? "feedback-blocked"
+                                    : "feedback-reopened",
+                              target: n.target,
+                              body: n.body,
+                            });
+                          }}
                           className="text-[10px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"
                         >
                           {s === "open" ? "Reopen" : `Mark ${FEEDBACK_STATE_LABEL[s].toLowerCase()}`}
