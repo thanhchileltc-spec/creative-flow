@@ -10,6 +10,7 @@ import {
 import { useWorkflow, progressFor, useStepRecords, type WorkflowStep } from "@/lib/approval-workflow";
 import { ApprovalTrack } from "@/components/approval-track";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 
 
 type Filter = ApprovalStatus | "all";
@@ -177,6 +178,7 @@ function TalentBank() {
         </div>
         <div className="flex items-center gap-6">
           <RoleSwitcher />
+          <NotificationBell />
           <div className="text-[11px] text-ink-secondary">
             <span className="text-warning font-bold tabular-nums">
               {String(needsAction).padStart(2, "0")}

@@ -11,6 +11,7 @@ import {
 import type { Episode } from "@/lib/episodes";
 import { HandoffFeedback } from "@/components/handoff-feedback";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 
 export const Route = createFileRoute("/handoff/$slug")({
   loader: ({ params }) => {
@@ -108,6 +109,7 @@ function HandoffDetail() {
         </div>
         <div className="flex items-center gap-8">
           <RoleSwitcher />
+          <NotificationBell />
           <Link
             to="/handoff"
             className="text-[11px] uppercase tracking-[0.12em] text-ink-secondary hover:text-ink transition-colors"

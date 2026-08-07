@@ -13,6 +13,7 @@ import {
 } from "@/lib/approval-workflow";
 import { useAuditLog } from "@/lib/audit-log";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 import { GateDetailPanel, type GateSelection } from "@/components/gate-detail-panel";
 
 export const Route = createFileRoute("/talent/timeline")({
@@ -201,6 +202,7 @@ function ApprovalTimeline() {
         </div>
         <div className="flex items-center gap-6">
           <RoleSwitcher />
+          <NotificationBell />
           <div className="text-[11px] text-ink-secondary">
             <span className="text-warning font-bold tabular-nums">
               {String(blockedCount).padStart(2, "0")}

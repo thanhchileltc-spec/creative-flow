@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuditLog } from "@/lib/audit-log";
 import { AuditTrail } from "@/components/audit-trail";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { NotificationBell } from "@/components/notification-bell";
 
 export const Route = createFileRoute("/talent/audit")({
   head: () => {
@@ -55,6 +56,7 @@ function AuditLogPage() {
         </div>
         <div className="flex items-center gap-6">
           <RoleSwitcher />
+          <NotificationBell />
           <Link to="/talent" className="text-[11px] text-ink-secondary hover:text-ink">
             ← Talent Bank
           </Link>
