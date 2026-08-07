@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TALENT, APPROVAL_LABEL } from "@/lib/talent-bank";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@/lib/approval-workflow";
 import { useAuditLog } from "@/lib/audit-log";
 import { RoleSwitcher } from "@/components/role-switcher";
+import { GateDetailPanel, type GateSelection } from "@/components/gate-detail-panel";
 
 export const Route = createFileRoute("/talent/timeline")({
   head: () => {
@@ -61,6 +63,7 @@ function Row({
   steps,
   delay,
   lastAt,
+  onSelect,
 }: {
   talentId: string;
   name: string;
@@ -68,6 +71,7 @@ function Row({
   steps: WorkflowStep[];
   delay: number;
   lastAt?: string;
+  onSelect: (stepId: string) => void;
 }) {
   const p = progressFor(talentId, steps);
   const status = derivedStatus(talentId, steps);
@@ -112,7 +116,13 @@ function Row({
             const r = stepRecord(talentId, s.id);
             const c = CELL[r.state];
             return (
-              <div key={s.id} className="relative">
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => onSelect(s.id)}
+                aria-label={`${s.label} — ${STEP_STATE_LABEL[r.state]} for ${name}. Open gate details.`}
+                className="relative text-left cursor-pointer -mx-1 px-1 pb-1 rounded-[2px] hover:bg-ink/[0.03] focus:outline-none focus-visible:ring-1 focus-visible:ring-ink/30 transition-colors duration-[var(--dur-fast)]"
+              >
                 <div className="flex items-center">
                   <span className={`block h-[9px] w-[9px] rounded-full shrink-0 ${c.dot}`} />
                   {i < steps.length - 1 && <span className={`block h-[1.5px] flex-1 ${c.line}`} />}
@@ -131,7 +141,7 @@ function Row({
                     <p className="text-[9px] text-ink-muted leading-snug mt-1 pr-1">{r.note}</p>
                   )}
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -148,6 +158,7 @@ function ApprovalTimeline() {
   const [steps] = useWorkflow();
   useStepRecords();
   const log = useAuditLog();
+  const [selection, setSelection] = useState<GateSelection>(null);
 
   const blockedCount = TALENT.filter((t) => progressFor(t.id, steps).blocked).length;
   const completeCount = TALENT.filter((t) => progressFor(t.id, steps).complete).length;
@@ -249,11 +260,14 @@ function ApprovalTimeline() {
               steps={steps}
               delay={80 + i * 40}
               lastAt={lastFor(t.id)}
+              onSelect={(stepId) => setSelection({ talentId: t.id, stepId })}
             />
           ))}
           <div className="border-t-hairline" />
         </div>
       </main>
+
+      <GateDetailPanel selection={selection} steps={steps} onClose={() => setSelection(null)} />
     </div>
   );
 }
