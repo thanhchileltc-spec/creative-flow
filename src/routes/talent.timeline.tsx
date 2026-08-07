@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TALENT, APPROVAL_LABEL } from "@/lib/talent-bank";
 import {
