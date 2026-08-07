@@ -260,11 +260,14 @@ function ApprovalTimeline() {
               steps={steps}
               delay={80 + i * 40}
               lastAt={lastFor(t.id)}
+              onSelect={(stepId) => setSelection({ talentId: t.id, stepId })}
             />
           ))}
           <div className="border-t-hairline" />
         </div>
       </main>
+
+      <GateDetailPanel selection={selection} steps={steps} onClose={() => setSelection(null)} />
     </div>
   );
 }
