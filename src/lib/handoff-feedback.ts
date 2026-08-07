@@ -127,3 +127,23 @@ export function useHandoffFeedback(slug: string) {
 
   return { notes, counts, add, setState, remove };
 }
+
+/** Read-only notes across several handoff slugs, newest last. */
+export function useFeedbackForSlugs(slugs: string[]): FeedbackNote[] {
+  const key = slugs.join("|");
+  const [all, setAll] = useState<FeedbackNote[]>([]);
+
+  useEffect(() => {
+    const sync = () => setAll(load());
+    sync();
+    window.addEventListener(EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  const wanted = key ? key.split("|") : [];
+  return all.filter((n) => wanted.includes(n.slug));
+}
