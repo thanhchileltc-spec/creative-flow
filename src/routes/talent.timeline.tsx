@@ -12,8 +12,6 @@ import {
   type WorkflowStep,
 } from "@/lib/approval-workflow";
 import { useAuditLog } from "@/lib/audit-log";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { NotificationBell } from "@/components/notification-bell";
 import { GateDetailPanel, type GateSelection } from "@/components/gate-detail-panel";
 
 export const Route = createFileRoute("/talent/timeline")({

@@ -1,8 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuditLog } from "@/lib/audit-log";
 import { AuditTrail } from "@/components/audit-trail";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { NotificationBell } from "@/components/notification-bell";
 
 export const Route = createFileRoute("/talent/audit")({
   head: () => {

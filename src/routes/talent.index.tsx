@@ -9,8 +9,6 @@ import {
 } from "@/lib/talent-bank";
 import { useWorkflow, progressFor, useStepRecords, type WorkflowStep } from "@/lib/approval-workflow";
 import { ApprovalTrack } from "@/components/approval-track";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { NotificationBell } from "@/components/notification-bell";
 
 
 type Filter = ApprovalStatus | "all";

@@ -19,8 +19,6 @@ import {
   type WorkflowStep,
 } from "@/lib/approval-workflow";
 import { stateClass } from "@/components/approval-track";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { NotificationBell } from "@/components/notification-bell";
 import { allowedStates, canActOnStep, denialReason, useRole, type Role } from "@/lib/roles";
 import { recordAudit, useAuditLog } from "@/lib/audit-log";
 import { AuditTrail } from "@/components/audit-trail";

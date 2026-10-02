@@ -10,8 +10,6 @@ import {
 } from "@/lib/handoff";
 import type { Episode } from "@/lib/episodes";
 import { HandoffFeedback } from "@/components/handoff-feedback";
-import { RoleSwitcher } from "@/components/role-switcher";
-import { NotificationBell } from "@/components/notification-bell";
 
 export const Route = createFileRoute("/handoff/$slug")({
   loader: ({ params }) => {
