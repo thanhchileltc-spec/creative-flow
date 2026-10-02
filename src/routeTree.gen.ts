@@ -9,8 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublishRouteImport } from './routes/publish'
 import { Route as GanttRouteImport } from './routes/gantt'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CrewRouteImport } from './routes/crew'
+import { Route as BudgetRouteImport } from './routes/budget'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
@@ -23,6 +26,11 @@ import { Route as ShootDaysDayIdRouteImport } from './routes/shoot-days.$dayId'
 import { Route as HandoffSlugRouteImport } from './routes/handoff.$slug'
 import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 
+const PublishRoute = PublishRouteImport.update({
+  id: '/publish',
+  path: '/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GanttRoute = GanttRouteImport.update({
   id: '/gantt',
   path: '/gantt',
@@ -31,6 +39,16 @@ const GanttRoute = GanttRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrewRoute = CrewRouteImport.update({
+  id: '/crew',
+  path: '/crew',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BudgetRoute = BudgetRouteImport.update({
+  id: '/budget',
+  path: '/budget',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -91,8 +109,11 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/budget': typeof BudgetRoute
+  '/crew': typeof CrewRoute
   '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
+  '/publish': typeof PublishRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -106,8 +127,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/budget': typeof BudgetRoute
+  '/crew': typeof CrewRoute
   '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
+  '/publish': typeof PublishRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -122,8 +146,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/budget': typeof BudgetRoute
+  '/crew': typeof CrewRoute
   '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
+  '/publish': typeof PublishRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
   '/shoot-days/$dayId': typeof ShootDaysDayIdRoute
@@ -139,8 +166,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/budget'
+    | '/crew'
     | '/dashboard'
     | '/gantt'
+    | '/publish'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -154,8 +184,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/budget'
+    | '/crew'
     | '/dashboard'
     | '/gantt'
+    | '/publish'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -169,8 +202,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/budget'
+    | '/crew'
     | '/dashboard'
     | '/gantt'
+    | '/publish'
     | '/episodes/$slug'
     | '/handoff/$slug'
     | '/shoot-days/$dayId'
@@ -185,8 +221,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BudgetRoute: typeof BudgetRoute
+  CrewRoute: typeof CrewRoute
   DashboardRoute: typeof DashboardRoute
   GanttRoute: typeof GanttRoute
+  PublishRoute: typeof PublishRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
   HandoffSlugRoute: typeof HandoffSlugRoute
   ShootDaysDayIdRoute: typeof ShootDaysDayIdRoute
@@ -201,6 +240,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/publish': {
+      id: '/publish'
+      path: '/publish'
+      fullPath: '/publish'
+      preLoaderRoute: typeof PublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gantt': {
       id: '/gantt'
       path: '/gantt'
@@ -213,6 +259,20 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crew': {
+      id: '/crew'
+      path: '/crew'
+      fullPath: '/crew'
+      preLoaderRoute: typeof CrewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/budget': {
+      id: '/budget'
+      path: '/budget'
+      fullPath: '/budget'
+      preLoaderRoute: typeof BudgetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -297,8 +357,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BudgetRoute: BudgetRoute,
+  CrewRoute: CrewRoute,
   DashboardRoute: DashboardRoute,
   GanttRoute: GanttRoute,
+  PublishRoute: PublishRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
   HandoffSlugRoute: HandoffSlugRoute,
   ShootDaysDayIdRoute: ShootDaysDayIdRoute,

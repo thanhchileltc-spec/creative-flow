@@ -4,7 +4,7 @@ import { deriveAttention } from "@/lib/attention";
 import { EPISODES } from "@/lib/episodes";
 import { SHOOT_DAYS } from "@/lib/shoot-days";
 import { TALENT } from "@/lib/talent-bank";
-import { useActingRole } from "@/lib/roles";
+import { useRole } from "@/lib/roles";
 import { Metric, PageContainer, PageHeader, SectionHeader, Toggle, Status } from "@/components/ui/platform";
 import { useAuditLog, formatStamp } from "@/lib/audit-log";
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/dashboard")({
 
 function Dashboard() {
   const [scope, setScope] = useState<"all" | "mine">("all");
-  const role = useActingRole();
+  const [role] = useRole();
   const all = deriveAttention();
   const items = scope === "mine" ? all.filter((i) => i.owner === role) : all;
   const audit = useAuditLog().slice(0, 6);
@@ -73,7 +73,7 @@ function Dashboard() {
           {audit.map((a) => (
             <div key={a.id} className="grid grid-cols-[110px_1fr] gap-4 border-b-hairline py-3">
               <span className="text-value text-ink-secondary">{formatStamp(a.at)}</span>
-              <span className="text-[13px]">{a.role} moved {a.stepId} {a.from} → {a.to}</span>
+              <span className="text-[13px]">{a.by} moved {a.talentName} · {a.stepLabel} {a.from} → {a.to}</span>
             </div>
           ))}
         </section>
