@@ -103,36 +103,6 @@ function GanttView() {
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-5 bg-canvas/85 backdrop-blur-md border-b-hairline">
-        <div className="flex items-center gap-12">
-          <Link to="/" className="text-[13px] font-bold tracking-[-0.02em]">
-            Chi Les
-          </Link>
-          <div className="hidden md:flex gap-8 text-[13px] text-ink-secondary">
-            <Link to="/" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Episodes
-            </Link>
-            <Link to="/gantt" className="text-ink">
-              Gantt
-            </Link>
-            <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Shoot Days
-            </Link>
-            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Talent Bank
-            </Link>
-            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Editor Handoff
-            </Link>
-          </div>
-        </div>
-        <div className="text-[11px] text-ink-secondary">
-          <span className="text-warning font-bold tabular-nums">
-            {String(blocked).padStart(2, "0")}
-          </span>{" "}
-          blocked
-        </div>
-      </nav>
 
       <main className="px-8 py-24 max-w-[1440px] mx-auto">
         <header className="mb-10 animate-reveal">

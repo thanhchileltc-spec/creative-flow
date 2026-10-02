@@ -91,35 +91,6 @@ function Pipeline() {
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
-      {/* Navigation — disappears until needed */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-5 bg-canvas/85 backdrop-blur-md border-b-hairline">
-        <div className="flex items-center gap-12">
-          <span className="text-[13px] font-bold tracking-[-0.02em]">Chi Les</span>
-          <div className="hidden md:flex gap-8 text-[13px] text-ink-secondary">
-            <a href="#" className="text-ink">Episodes</a>
-            <Link to="/gantt" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Gantt</Link>
-            <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Shoot Days</Link>
-
-            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Talent Bank</Link>
-            <Link to="/handoff" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Editor Handoff
-            </Link>
-            <a href="#" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">Team</a>
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="text-[11px] text-ink-secondary">
-            <span className="text-warning font-bold">
-              {String(stalled).padStart(2, "0")}
-            </span>{" "}
-            stalled
-          </div>
-          {/* Single solid CTA — the one primary button on this screen */}
-          <button className="px-5 py-2 bg-ink text-canvas text-[13px] font-medium rounded-none hover:bg-ink-secondary transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out-soft)]">
-            Create project
-          </button>
-        </div>
-      </nav>
 
       <main className="px-8 py-24 max-w-[1440px] mx-auto">
         {/* Section header */}
