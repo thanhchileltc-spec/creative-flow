@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { AppShell } from "@/components/app-shell";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -77,26 +78,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Chi Les — Production Platform" },
+      { title: "ALICE — Production Platform" },
       { name: "description", content: "A minimal production platform for cinematic documentary storytelling." },
       { name: "author", content: "Chi Les" },
-      { property: "og:title", content: "Chi Les — Production Platform" },
+      { property: "og:title", content: "ALICE — Production Platform" },
       { property: "og:description", content: "A minimal production platform for cinematic documentary storytelling." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Chi Les — Production Platform" },
+      { name: "twitter:title", content: "ALICE — Production Platform" },
       { name: "twitter:description", content: "A minimal production platform for cinematic documentary storytelling." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/db4eaae9-d513-4d25-8136-41a5ceccef81/id-preview-62eacdc2--1c3c4e9e-ce5c-42b7-8754-276a08837466.lovable.app-1785474163515.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/db4eaae9-d513-4d25-8136-41a5ceccef81/id-preview-62eacdc2--1c3c4e9e-ce5c-42b7-8754-276a08837466.lovable.app-1785474163515.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5/400.css" },
+      { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/@fontsource/intel-one-mono@5/600.css" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
       },
     ],
   }),
@@ -126,7 +127,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AppShell>
+        <Outlet />
+      </AppShell>
     </QueryClientProvider>
   );
 }

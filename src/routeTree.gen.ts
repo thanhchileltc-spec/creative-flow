@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as GanttRouteImport } from './routes/gantt'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as ShootDaysIndexRouteImport } from './routes/shoot-days.index'
@@ -25,6 +26,11 @@ import { Route as EpisodesSlugRouteImport } from './routes/episodes.$slug'
 const GanttRoute = GanttRouteImport.update({
   id: '/gantt',
   path: '/gantt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -85,6 +91,7 @@ const EpisodesSlugRoute = EpisodesSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
@@ -114,6 +122,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/gantt': typeof GanttRoute
   '/episodes/$slug': typeof EpisodesSlugRoute
   '/handoff/$slug': typeof HandoffSlugRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/gantt'
     | '/episodes/$slug'
     | '/handoff/$slug'
@@ -173,6 +185,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   GanttRoute: typeof GanttRoute
   EpisodesSlugRoute: typeof EpisodesSlugRoute
   HandoffSlugRoute: typeof HandoffSlugRoute
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/gantt'
       fullPath: '/gantt'
       preLoaderRoute: typeof GanttRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -277,6 +297,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   GanttRoute: GanttRoute,
   EpisodesSlugRoute: EpisodesSlugRoute,
   HandoffSlugRoute: HandoffSlugRoute,

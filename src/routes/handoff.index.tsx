@@ -91,30 +91,6 @@ function HandoffIndex() {
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-5 bg-canvas/85 backdrop-blur-md border-b-hairline">
-        <div className="flex items-center gap-12">
-          <Link to="/" className="text-[13px] font-bold tracking-[-0.02em]">
-            Chi Les
-          </Link>
-          <div className="hidden md:flex gap-8 text-[13px] text-ink-secondary">
-            <Link to="/" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Episodes
-            </Link>
-            <Link to="/shoot-days" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Shoot Days
-            </Link>
-            <Link to="/talent" className="hover:text-ink transition-colors duration-[var(--dur-fast)]">
-              Talent Bank
-            </Link>
-            <Link to="/handoff" className="text-ink">
-              Editor Handoff
-            </Link>
-          </div>
-        </div>
-        <span className="text-[11px] text-ink-secondary tabular-nums">
-          {blocked} not ready
-        </span>
-      </nav>
 
       <main className="px-8 py-16 max-w-[1120px] mx-auto">
         <header className="pb-12 border-b-hairline animate-reveal">
